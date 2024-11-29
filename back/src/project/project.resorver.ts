@@ -3,7 +3,7 @@ import { ProjectModel } from './models/project.model';
 import { ProjectService } from './project.service';
 import { ProjectFilterInput } from './dto/project-filter.input';
 import { ProjectType } from './entities/project-type.enum';
-import { Project } from './entities/project.entities';
+import { Project } from './entities/project.entity';
 import { UpdateProject } from './models/update-project.models';
 import { TechnologyModel } from './models/technology.model';
 

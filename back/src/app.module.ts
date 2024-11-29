@@ -4,7 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
 import { ProjectModule } from './project/project.module';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-p
       driver: ApolloDriver,
       playground: false,
       autoSchemaFile: true,
-      plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     ConfigModule,
     DatabaseModule,

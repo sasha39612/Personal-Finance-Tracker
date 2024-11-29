@@ -1,5 +1,11 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Project } from './project.entities';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Project } from './project.entity';
 
 @Entity()
 export class Technology {
@@ -13,5 +19,6 @@ export class Technology {
   tag: string;
 
   @ManyToMany(() => Project, (project) => project.technologies)
+  @JoinTable()
   projects: Project[];
 }
