@@ -1,7 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../../src/app.module';
+import { DataSource } from 'typeorm';
+import { print } from 'graphql';
+import {
+  createProject,
+  getProjectById,
+  getProject,
+  updateProject,
+} from './queries';
+
+// TODO: finish after project module!!!!!!!
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

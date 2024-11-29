@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  mine_project_postgres:
+    image: postgres:14
+    restart: always
+
+    ports:
+      - 5432:5432
+    
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=mine_project
+
+  mine_project_test:
+    image: postgres:14
+    restart: always
+
+    ports:
+      - 5433:5432
+    
+    volumes:
+      - ./db-data:var/lib/postgresql/data
+    
+    environment:
+      - POSTGRES_PASSWORD=postgres_test
+      - POSTGRES_USER=postgres_test
+      - POSTGRES_DB=mine_project_test
+  

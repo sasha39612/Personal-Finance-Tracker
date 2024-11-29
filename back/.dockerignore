@@ -1,0 +1,13 @@
+# compiled output
+/dist
+/node_modules
+/build
+
+# OS
+.DS_Store
+
+# database folder
+db-data
+db-test-data
+
+.env

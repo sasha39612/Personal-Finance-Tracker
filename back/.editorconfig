@@ -1,0 +1,8 @@
+[*]
+indent_style = space
+
+[*.{js,ts,json}]
+indent_site = 2
+
+[*]
+end_od_line = lf
