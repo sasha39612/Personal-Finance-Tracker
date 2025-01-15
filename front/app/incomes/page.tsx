@@ -1,4 +1,4 @@
-import IncomesForm from "@/components/incomes/incomesForm"
+import IncomesForm from "@/components/incomes/IncomesForm"
 import { incomes } from '../../datum/dates';
 
 const Incomes = () => {

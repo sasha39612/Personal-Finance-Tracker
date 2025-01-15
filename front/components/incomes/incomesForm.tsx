@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react";
+import DatePickerComp from "../datepicker/DatePickerComp";
 
 export interface Entity {
   id: string;
@@ -17,6 +18,7 @@ export interface Incomes {
 
 const IncomesForm = ({ incomes }: { incomes: Incomes[] }) => {
   const [formValues, setFormValues] = useState(incomes);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, incomeId: string, entityId: string) => {
     const newValue = e.target.value;
@@ -38,8 +40,8 @@ const IncomesForm = ({ incomes }: { incomes: Incomes[] }) => {
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted with values:", formValues);
+    console.log('selectedDate', selectedDate)
   }
-
   return (
     <form className="ml-4" onSubmit={handleOnSubmit}>
       <div className="space-y-4">
@@ -47,6 +49,10 @@ const IncomesForm = ({ incomes }: { incomes: Incomes[] }) => {
         <p className="-mt-24 text-xl text-gray-600">
           This information will be saved to your incomes.
         </p>
+        <DatePickerComp
+          date={selectedDate}
+          onDateChange={setSelectedDate}
+        />
         <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6 list-none">
           {Array.isArray(formValues) ? formValues.map((incomeItem) => (
             <li key={incomeItem.id} className="mt-4">

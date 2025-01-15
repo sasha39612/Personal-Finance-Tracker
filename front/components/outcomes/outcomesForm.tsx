@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react";
+import DatePickerComp from "../datepicker/DatePickerComp";
 
 export interface Entity {
   id: string;
@@ -16,6 +17,8 @@ export interface Outcomes {
 
 const OutcomesForm = ({ outcomes }: { outcomes: Outcomes[] }) => {
   const [formValues, setFormValues] = useState(outcomes);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, incomeId: string, entityId: string) => {
     const newValue = e.target.value;
@@ -46,6 +49,10 @@ const OutcomesForm = ({ outcomes }: { outcomes: Outcomes[] }) => {
         <p className="-mt-24 text-xl text-gray-600">
           This information will be saved to your outcomes.
         </p>
+        <DatePickerComp
+          date={selectedDate}
+          onDateChange={setSelectedDate}
+        />
         <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6 mr-2 list-none">
           {Array.isArray(formValues) ? formValues.map((incomeItem) => (
             <li key={incomeItem.id} className="mt-4">

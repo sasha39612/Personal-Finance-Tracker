@@ -1,29 +1,31 @@
+import Link from "next/link";
+
 const Header = () => {
-  return <header className="flex justify-between p-4 w-full text-white  bg-indigo-400">
+  return <header className="flex justify-between p-4 w-full text-white  bg-indigo-700">
     <div>
-      <a
+      <Link
         className="flex items-center hover:underline hover:underline-offset-4"
         href="/"
         rel="noopener noreferrer"
       >
         Chats
-      </a>
+      </Link>
     </div>
     <div className="flex gap-4">
-      <a
+      <Link
         className="flex items-center hover:underline hover:underline-offset-4"
         href="/incomes"
         rel="noopener noreferrer"
       >
         Incomes
-      </a>
-      <a
+      </Link>
+      <Link
         className="flex items-center hover:underline hover:underline-offset-4"
         href="/outcomes"
         rel="noopener noreferrer"
       >
         Outcomes
-      </a>
+      </Link>
     </div>
   </header>
 }

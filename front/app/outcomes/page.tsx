@@ -1,4 +1,4 @@
-import OutcomesForm from "@/components/outcomes/outcomesForm"
+import OutcomesForm from "@/components/outcomes/OutcomesForm"
 import { outcomes  } from '../../datum/dates'
 
 const Outcomes = () => {

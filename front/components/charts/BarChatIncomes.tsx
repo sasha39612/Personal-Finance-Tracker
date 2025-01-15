@@ -33,7 +33,6 @@ const BarChatIncomes: React.FC = () => {
             labels: ["John", "Jane", "Doe"],
             datasets: [
               {
-                label: "Info",
                 data: [34, 64, 23],
                 backgroundColor: [
                   "rgba(255, 99, 132, 0.2)",
@@ -75,12 +74,13 @@ const BarChatIncomes: React.FC = () => {
 
   return (
     <div
-      className="relative w-full h-full lg:col-start-1 lg:col-end-1 lg:row-start-2 lg:row-end-2"
+      className="relative w-full h-full lg:col-span-1 lg:row-start-2 lg:row-end-2"
     >
       <p className="text-center uppercase pb-1">Incomes</p>
       <canvas style={{
         width: "100%",
         height: "100%",
+        maxHeight: '600px',
       }}
         ref={chartRef} />
     </div>
