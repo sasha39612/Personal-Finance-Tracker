@@ -1,7 +1,8 @@
 import IncomesForm from "@/components/incomes/incomesForm"
+import { incomes } from '../../datum/dates';
 
 const Incomes = () => {
-  return <IncomesForm />
+  return <IncomesForm incomes={incomes} />
 }
 
-export default Incomes
+export default Incomes;

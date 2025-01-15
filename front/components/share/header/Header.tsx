@@ -1,5 +1,5 @@
 const Header = () => {
-  return <header className="flex justify-between p-4 w-full">
+  return <header className="flex justify-between p-4 w-full text-white  bg-indigo-400">
     <div>
       <a
         className="flex items-center hover:underline hover:underline-offset-4"
