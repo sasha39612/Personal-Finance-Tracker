@@ -31,7 +31,7 @@ $ docker compose up -d
 
 ### Creating migration
 
-Typeorm automatically tracks all entities by file name \*.entity,ts and to generate run script for naming please follow kebab-case as for files
+Typeorm automatically tracks all entities by file name \*.entity.ts and to generate run script for naming please follow kebab-case as for files
 
 ```bash
   $ npm run migration:generate create-new-table

@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
-import { ProjectModule } from './project/project.module';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { IncomeModule } from './income/income.module';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
     }),
     ConfigModule,
     DatabaseModule,
-    ProjectModule,
+    IncomeModule,
   ],
 })
 export class AppModule {}
