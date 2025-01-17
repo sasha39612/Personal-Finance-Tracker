@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Suspense } from "react";
+import Loading from "./loading";
+import Header from "@/components/share/header/Header";
+import Footer from "@/components/share/footer/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,11 +29,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <Suspense fallback={<Loading />}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-7xl ml-[auto] mr-[auto]`}
+        >
+          <Header />
+          <main className="font-[family-name:var(--font-geist-sans)]">
+            {children}
+          </main>
+          <Footer />
+          <div id="portal-root"></div>
+        </body>
+      </Suspense>
     </html>
   );
 }
