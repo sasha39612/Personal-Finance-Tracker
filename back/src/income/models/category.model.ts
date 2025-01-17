@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { IncomeModel } from './income.model';
 import { EntitiesModel } from './entities.model';
 
 @ObjectType()
@@ -9,9 +8,6 @@ export class CategoryModel {
 
   @Field()
   title: string;
-
-  @Field(() => IncomeModel)
-  income: IncomeModel;
 
   @Field(() => [EntitiesModel])
   entities: EntitiesModel[];

@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { CategoryModel } from './category.model';
 
 @ObjectType()
 export class EntitiesModel {
@@ -14,7 +13,4 @@ export class EntitiesModel {
 
   @Field()
   sum: number;
-
-  @Field(() => CategoryModel)
-  category: CategoryModel;
 }

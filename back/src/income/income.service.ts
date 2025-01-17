@@ -4,37 +4,40 @@ import { Income } from './entities/income.entity';
 import { In, Repository } from 'typeorm';
 import { Category } from './entities/categories.entity';
 import { IncomeModel } from './models/income.model';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class IncomeService {
   constructor(
     @InjectRepository(Income)
-    private IncomeRepository: Repository<Income>,
+    private incomeRepository: Repository<Income>,
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
   ) {}
 
   async createIncome(datum: Date): Promise<Income> {
-    return this.IncomeRepository.save({
+    return this.incomeRepository.save({
       datum,
     });
   }
 
   async getIncomeById(id: number): Promise<IncomeModel> {
-    return await this.IncomeRepository.findOne({
+    const income = await this.incomeRepository.findOne({
       where: { id },
-      relations: ['categories'],
+      relations: ['categories', 'categories.entities'],
     });
+    return plainToInstance(IncomeModel, income);
   }
 
   async getIncomes(): Promise<IncomeModel[]> {
-    return await this.IncomeRepository.find({
-      relations: ['categories'],
+    const incomes = await this.incomeRepository.find({
+      relations: ['categories', 'categories.entities'],
     });
+    return incomes.map((income) => plainToInstance(IncomeModel, income));
   }
 
   async deleteIncome(id: number): Promise<number> {
-    await this.IncomeRepository.delete(id);
+    await this.incomeRepository.delete(id);
     return id;
   }
 
@@ -42,7 +45,7 @@ export class IncomeService {
     incomeId: number,
     categoryIds: number[],
   ): Promise<Category[]> {
-    const income = await this.IncomeRepository.findOne({
+    const income = await this.incomeRepository.findOne({
       where: { id: incomeId },
       relations: ['categories'],
     });
@@ -51,7 +54,7 @@ export class IncomeService {
     });
 
     income.categories = [...income.categories, ...categories];
-    await this.IncomeRepository.save(income);
+    await this.incomeRepository.save(income);
 
     return categories;
   }
@@ -60,7 +63,7 @@ export class IncomeService {
     incomeId: number,
     categoryIds: number[],
   ): Promise<number[]> {
-    const income = await this.IncomeRepository.findOne({
+    const income = await this.incomeRepository.findOne({
       where: { id: incomeId },
       relations: ['categories'],
     });
@@ -69,7 +72,7 @@ export class IncomeService {
       (i) => !categoryIds.includes(i.id),
     );
 
-    await this.IncomeRepository.save(income);
+    await this.incomeRepository.save(income);
 
     return categoryIds;
   }

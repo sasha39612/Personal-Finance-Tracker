@@ -2,7 +2,6 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CategoryModel } from './models/category.model';
 import { IncomeModel } from './models/income.model';
 import { IncomeService } from './income.service';
-import { Income } from './entities/income.entity';
 
 @Resolver(() => IncomeModel)
 export class IncomeResolver {
@@ -13,8 +12,13 @@ export class IncomeResolver {
     return this.incomeService.getIncomes();
   }
 
+  @Query(() => IncomeModel)
+  async incomeById(@Args('id', { type: () => Int }) id: number) {
+    return await this.incomeService.getIncomeById(id);
+  }
+
   @Mutation(() => IncomeModel)
-  async createIncome(@Args('datum') datum: Date): Promise<Income> {
+  async createIncome(@Args('datum') datum: Date) {
     return this.incomeService.createIncome(datum);
   }
 
@@ -33,13 +37,13 @@ export class IncomeResolver {
     return this.incomeService.addIncomeCategory(incomeId, categoryIds);
   }
 
-  @Mutation(() => [CategoryModel])
+  @Mutation(() => [Int])
   async deleteIncomeCategories(
     @Args('incomeId', { type: () => Int })
     incomeId: number,
-    @Args('CategoriesIds', { type: () => [Int] })
-    CategoriesIds: number[],
+    @Args('categoriesIds', { type: () => [Int] })
+    categoriesIds: number[],
   ) {
-    return this.incomeService.deleteIncomeCategories(incomeId, CategoriesIds);
+    return this.incomeService.deleteIncomeCategories(incomeId, categoriesIds);
   }
 }

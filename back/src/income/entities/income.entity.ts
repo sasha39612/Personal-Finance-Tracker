@@ -9,7 +9,7 @@ export class Income {
   @Column()
   datum: Date;
 
-  @OneToMany(() => Category, (IncomeCategory) => IncomeCategory.income, {
+  @OneToMany(() => Category, (incomeCategory) => incomeCategory.income, {
     cascade: true,
   })
   categories: Category[];
