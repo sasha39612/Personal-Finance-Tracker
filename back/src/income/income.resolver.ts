@@ -2,6 +2,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CategoryModel } from './models/category.model';
 import { IncomeModel } from './models/income.model';
 import { IncomeService } from './income.service';
+import { IncomeInput } from './dto/incomes.input';
 
 @Resolver(() => IncomeModel)
 export class IncomeResolver {
@@ -18,8 +19,10 @@ export class IncomeResolver {
   }
 
   @Mutation(() => IncomeModel)
-  async createIncome(@Args('datum') datum: Date) {
-    return this.incomeService.createIncome(datum);
+  createIncome(
+    @Args('incomeData') incomeData: IncomeInput,
+  ): Promise<IncomeModel> {
+    return this.incomeService.createIncome(incomeData);
   }
 
   @Mutation(() => String)

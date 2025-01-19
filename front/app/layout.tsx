@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Suspense } from "react";
+import { ApolloWrapper } from "@/lib/apollo-wrapper";
 import Loading from "./loading";
 import Header from "@/components/share/header/Header";
 import Footer from "@/components/share/footer/Footer";
@@ -33,12 +34,14 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-7xl ml-[auto] mr-[auto]`}
         >
-          <Header />
-          <main className="font-[family-name:var(--font-geist-sans)]">
-            {children}
-          </main>
-          <Footer />
-          <div id="portal-root"></div>
+          <ApolloWrapper>
+            <Header />
+            <main className="font-[family-name:var(--font-geist-sans)]">
+              {children}
+            </main>
+            <Footer />
+            <div id="portal-root"></div>
+          </ApolloWrapper>
         </body>
       </Suspense>
     </html>
