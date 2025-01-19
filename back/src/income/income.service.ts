@@ -5,6 +5,7 @@ import { In, Repository } from 'typeorm';
 import { Category } from './entities/categories.entity';
 import { IncomeModel } from './models/income.model';
 import { plainToInstance } from 'class-transformer';
+import { IncomeInput } from './dto/incomes.input';
 
 @Injectable()
 export class IncomeService {
@@ -15,10 +16,22 @@ export class IncomeService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  async createIncome(datum: Date): Promise<Income> {
-    return this.incomeRepository.save({
-      datum,
+  async createIncome(incomeData: IncomeInput): Promise<Income> {
+    const categories = incomeData.categories.map((category) => {
+      return {
+        ...category,
+        entities: category.entities.map((entity) => ({
+          ...entity,
+        })),
+      };
     });
+
+    const income = this.incomeRepository.create({
+      ...incomeData,
+      categories,
+    });
+
+    return this.incomeRepository.save(income);
   }
 
   async getIncomeById(id: number): Promise<IncomeModel> {

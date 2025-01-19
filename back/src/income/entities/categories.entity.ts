@@ -21,6 +21,8 @@ export class Category {
   })
   income: Income;
 
-  @OneToMany(() => Entities, (entity) => entity.category)
+  @OneToMany(() => Entities, (entity) => entity.category, {
+    cascade: true,
+  })
   entities: Entities[];
 }

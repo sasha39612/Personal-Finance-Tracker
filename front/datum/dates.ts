@@ -455,260 +455,263 @@ export const outcomes = [
   },
 ];
 
-export const incomes = [
-  {
-    id: '1',
-    title: "Earned Income",
-    entities: [
-      {
-        id: '11',
-        description: "Salary/ Wages",
-        tooltip: "Income from full-time or part-time employment.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '12',
-        description: "Overtime",
-        tooltip: "Additional earnings for working beyond standard hours.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '13',
-        description: "Bonuses and Commissions",
-        tooltip: "Performance-based income from sales or achievements.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '14',
-        description: "Freelance",
-        tooltip: " Income earned from providing services on a project basis.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '2',
-    title: "Investment Income",
-    entities: [
-      {
-        id: '21',
-        description: "Dividends",
-        tooltip: "Earnings from owning shares in a company",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '22',
-        description: "Interest Income",
-        tooltip:
-          "Income from savings accounts, bonds, or other interest - bearing accounts.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '23',
-        description: "Capital Gains",
-        tooltip:
-          "Profit from selling investments like stocks, real estate, or other assets.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '24',
-        description: "Rental Income",
-        tooltip: "Earnings from leasing or renting out property.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '3',
-    title: "Business Income",
-    entities: [
-      {
-        id: '31',
-        description: "Profits from a Family Business",
-        tooltip: "Income generated from owning or operating a business",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '32',
-        description: "Side Hustles",
-        tooltip: "Earnings from small - scale entrepreneurial ventures or gigs.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '4',
-    title: "Passive Income",
-    entities: [
-      {
-        id: '41',
-        description: "Royalties",
-        tooltip:
-          "Income from intellectual property, like books, music, or patents.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '42',
-        description: "Affiliate Marketing",
-        tooltip: "Earnings from promoting products or services online.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '43',
-        description: "Licensing",
-        tooltip: "Fees for allowing others to use patents, trademarks, or other assets.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '5',
-    title: "Transfer Payments",
-    entities: [
-      {
-        id: '51',
-        description: "Pensions",
-        tooltip: "Payments from retirement funds.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '52',
-        description: "Social Security / State Pensions",
-        tooltip: "Government-provided retirement or disability income.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '53',
-        description: "Unemployment Benefits",
-        tooltip: "Assistance for jobless individuals.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '6',
-    title: "Gifts and Inheritance",
-    entities: [
-      {
-        id: '61',
-        description: "Monetary Gifts",
-        tooltip: "Money received from friends or family.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '62',
-        description: "Inheritance",
-        tooltip: "Assets passed down from deceased family members.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '7',
-    title: "Miscellaneous Income",
-    entities: [
-      {
-        id: '71',
-        description: "Lottery Winnings",
-        tooltip: "One-time or recurring winnings.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '72',
-        description: "Insurance Settlements",
-        tooltip: "Payments from insurance claims.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '73',
-        description: "Legal Settlements",
-        tooltip: "Compensation from lawsuits or agreements.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '74',
-        description: "Prizes or Awards",
-        tooltip: "Cash awards from contests or competitions.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '8',
-    title: "Government Assistance Programs",
-    entities: [
-      {
-        id: '81',
-        description: "Subsidies",
-        tooltip: "Financial support for housing, education, or other needs.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '82',
-        description: "Tax Credits and Refunds",
-        tooltip:
-          "Money received from tax benefits like child credits or rebates.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '9',
-    title: "Educational and Research Grants",
-    entities: [
-      {
-        id: '91',
-        description: "Scholarships / Stipends",
-        tooltip: "Support for education or academic pursuits.",
-        sum: "",
-        datum: "",
-      },
-      {
-        id: '92',
-        description: "Research Funding",
-        tooltip: "Payments for conducting studies or projects.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-  {
-    id: '10',
-    title: "Bartering or Non - Monetary Income",
-    entities: [
-      {
-        id: '101',
-        description: "Goods and Services Exchange",
-        tooltip:
-          "Trading goods or services without monetary transactions, which can indirectly impact finances.",
-        sum: "",
-        datum: "",
-      },
-    ],
-  },
-];
+export const incomes = {
+  data: '2020-05-12T23:50:21.817Z',
+  category: [
+    {
+      id: '1',
+      title: "Earned Income",
+      entities: [
+        {
+          id: '11',
+          description: "Salary/ Wages",
+          tooltip: "Income from full-time or part-time employment.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '12',
+          description: "Overtime",
+          tooltip: "Additional earnings for working beyond standard hours.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '13',
+          description: "Bonuses and Commissions",
+          tooltip: "Performance-based income from sales or achievements.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '14',
+          description: "Freelance",
+          tooltip: " Income earned from providing services on a project basis.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '2',
+      title: "Investment Income",
+      entities: [
+        {
+          id: '21',
+          description: "Dividends",
+          tooltip: "Earnings from owning shares in a company",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '22',
+          description: "Interest Income",
+          tooltip:
+            "Income from savings accounts, bonds, or other interest - bearing accounts.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '23',
+          description: "Capital Gains",
+          tooltip:
+            "Profit from selling investments like stocks, real estate, or other assets.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '24',
+          description: "Rental Income",
+          tooltip: "Earnings from leasing or renting out property.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '3',
+      title: "Business Income",
+      entities: [
+        {
+          id: '31',
+          description: "Profits from a Family Business",
+          tooltip: "Income generated from owning or operating a business",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '32',
+          description: "Side Hustles",
+          tooltip: "Earnings from small - scale entrepreneurial ventures or gigs.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '4',
+      title: "Passive Income",
+      entities: [
+        {
+          id: '41',
+          description: "Royalties",
+          tooltip:
+            "Income from intellectual property, like books, music, or patents.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '42',
+          description: "Affiliate Marketing",
+          tooltip: "Earnings from promoting products or services online.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '43',
+          description: "Licensing",
+          tooltip: "Fees for allowing others to use patents, trademarks, or other assets.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '5',
+      title: "Transfer Payments",
+      entities: [
+        {
+          id: '51',
+          description: "Pensions",
+          tooltip: "Payments from retirement funds.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '52',
+          description: "Social Security / State Pensions",
+          tooltip: "Government-provided retirement or disability income.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '53',
+          description: "Unemployment Benefits",
+          tooltip: "Assistance for jobless individuals.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '6',
+      title: "Gifts and Inheritance",
+      entities: [
+        {
+          id: '61',
+          description: "Monetary Gifts",
+          tooltip: "Money received from friends or family.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '62',
+          description: "Inheritance",
+          tooltip: "Assets passed down from deceased family members.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '7',
+      title: "Miscellaneous Income",
+      entities: [
+        {
+          id: '71',
+          description: "Lottery Winnings",
+          tooltip: "One-time or recurring winnings.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '72',
+          description: "Insurance Settlements",
+          tooltip: "Payments from insurance claims.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '73',
+          description: "Legal Settlements",
+          tooltip: "Compensation from lawsuits or agreements.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '74',
+          description: "Prizes or Awards",
+          tooltip: "Cash awards from contests or competitions.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '8',
+      title: "Government Assistance Programs",
+      entities: [
+        {
+          id: '81',
+          description: "Subsidies",
+          tooltip: "Financial support for housing, education, or other needs.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '82',
+          description: "Tax Credits and Refunds",
+          tooltip:
+            "Money received from tax benefits like child credits or rebates.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '9',
+      title: "Educational and Research Grants",
+      entities: [
+        {
+          id: '91',
+          description: "Scholarships / Stipends",
+          tooltip: "Support for education or academic pursuits.",
+          sum: "",
+          datum: "",
+        },
+        {
+          id: '92',
+          description: "Research Funding",
+          tooltip: "Payments for conducting studies or projects.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+    {
+      id: '10',
+      title: "Bartering or Non - Monetary Income",
+      entities: [
+        {
+          id: '101',
+          description: "Goods and Services Exchange",
+          tooltip:
+            "Trading goods or services without monetary transactions, which can indirectly impact finances.",
+          sum: "",
+          datum: "",
+        },
+      ],
+    },
+  ],
+}
 
