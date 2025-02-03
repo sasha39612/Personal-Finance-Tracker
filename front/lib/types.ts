@@ -1,5 +1,5 @@
 export interface Entities {
-  id: string;
+  id: number;
   description: string;
   tooltip: string;
   sum: number;

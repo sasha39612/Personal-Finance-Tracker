@@ -1,8 +1,19 @@
-import IncomesForm from "@/components/incomes/IncomesForm"
+
+import IncomesForm from '@/components/incomes/incomesForm';
 import { incomes } from '../../datum/dates';
+import { PreloadQuery } from '@/lib/apollo-client';
+import { Suspense } from 'react';
+import { queryRSCgql } from '@/lib/fetch-data';
 
 const Incomes = () => {
-  return <IncomesForm incomes={incomes} />
+  return <PreloadQuery
+    query={queryRSCgql}
+    variables={{ "startDate": "2025-01-01", "endDate": "2025-01-31" }}
+  >
+    <Suspense fallback={<>loading</>}>
+      <IncomesForm {...incomes}  />
+    </Suspense>
+  </PreloadQuery>
 }
 
 export default Incomes;

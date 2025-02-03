@@ -2,26 +2,35 @@ import { gql } from '@apollo/client'
 import { getClient } from './apollo-client'
 import { Incomes, IncomesInput } from './types'
 
-export async function queryRSC(): Promise<Incomes> {
-  const result = await getClient().query<{ income: Incomes }>({
-    query: gql`
-      query Income {
-        income {
+export const queryRSCgql = gql`
+  query Income($startDate: String!, $endDate: String!) {
+    income(startDate: $startDate, endDate: $endDate) {
+      id
+      datum
+      categories {
+        id
+        title
+        entities {
           id
-          datum
-          categories {
-            id
-            title
-            entities {
-              id
-              description
-              tooltip
-              sum
-            }
-          }
+          description
+          tooltip
+          sum
         }
       }
-    `
+    }
+  }
+`;
+
+
+export async function queryRSC(startDate: string, endDate: string): Promise<Incomes> {
+  const result = await getClient().query<{ income: Incomes }>({
+    query: queryRSCgql,
+    variables: { startDate, endDate },
+      context: {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    },
   });
 
   return result.data.income;

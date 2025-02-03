@@ -1,27 +1,83 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePickerComp from "../datepicker/DatePickerComp";
+import { Incomes } from "@/lib/types";
+import { gql, useLazyQuery, useMutation } from "@apollo/client";
+import { format, startOfDay, endOfDay } from "date-fns";
+import getCategories from "@/lib/getcategories";
 
-export interface Entity {
-  id: string;
-  description: string;
-  tooltip: string;
-  sum: string;
-  datum: string;
+interface QueryResult {
+  income: Incomes[];
 }
 
-export interface Incomes {
-  id: string;
-  title: string;
-  entities: Entity[],
-}
+type FetchIncomeFunction = (params: { variables: { startDate: string; endDate: string } }) => Promise<any>;
 
-const IncomesForm = ({ incomes }: { incomes: Incomes[] }) => {
-  const [formValues, setFormValues] = useState(incomes);
+export const queryRSCgql = gql`
+  query Income($startDate: String!, $endDate: String!) {
+    income(startDate: $startDate, endDate: $endDate) {
+      id
+      datum
+      categories {
+        id
+        title
+        entities {
+          id
+          description
+          tooltip
+          sum
+        }
+      }
+    }
+  }
+`;
+
+const CREATE_INCOME = gql`
+  mutation CreateIncome($incomeData: IncomeInput!) {
+    createIncome(incomeData: $incomeData) {
+      datum
+      categories {
+        title
+           entities {
+                description
+                tooltip
+                sum
+          }
+      }
+    }
+  }
+`;
+
+const getData = (fetchIncome: FetchIncomeFunction, selectedDate: Date) => fetchIncome({
+  variables: {
+    startDate: format(startOfDay(selectedDate), "yyyy-MM-dd'T'00:00:00XXX"),
+    endDate: format(endOfDay(selectedDate), "yyyy-MM-dd'T'23:59:59XXX"),
+  },
+});
+
+const IncomesForm = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [formValues, setFormValues] = useState<Incomes["categories"]>([]);
+  const [fetchIncome, { data: dataQuery, loading: loadingQuery, error: errorQuery }] = useLazyQuery<QueryResult>(
+    queryRSCgql
+  );
+  const [createIncome, { data: dataMutation, loading: loadingMutation, error: errorMutation }] = useMutation(CREATE_INCOME);
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, incomeId: string, entityId: string) => {
-    const newValue = e.target.value;
+
+  const handleClick = () => {
+    getData(fetchIncome, selectedDate)
+  }
+
+  useEffect(() => {
+    if (dataQuery?.income?.length) {
+      setFormValues(dataQuery.income[0].categories ?? []);
+    }
+    if (dataMutation?.income?.length) {
+      setFormValues(dataMutation.income[0].categories ?? []);
+    }
+  }, [dataQuery, dataMutation]);
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, incomeId: number, entityId: number) => {
+    const newValue = Number(e.target.value);
 
     setFormValues((prevValues) =>
       prevValues.map((income) =>
@@ -37,10 +93,25 @@ const IncomesForm = ({ incomes }: { incomes: Incomes[] }) => {
     );
   };
 
-  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted with values:", formValues);
     console.log('selectedDate', selectedDate)
+    const categories = getCategories(formValues)
+    try {
+      const response = await createIncome({
+        variables: {
+          incomeData: {
+            datum: selectedDate,
+            categories: categories,
+          }
+        }
+      })
+
+      console.log('response.data.createIncome.categories', response.data)
+    } catch (err) {
+      console.log('err', err)
+    }
   }
   return (
     <form className="ml-4" onSubmit={handleOnSubmit}>
@@ -49,12 +120,22 @@ const IncomesForm = ({ incomes }: { incomes: Incomes[] }) => {
         <p className="-mt-24 text-xl text-gray-600">
           This information will be saved to your incomes.
         </p>
-        <DatePickerComp
-          date={selectedDate}
-          onDateChange={setSelectedDate}
-        />
+        <div className="mt-6 flex items-center justify-start gap-x-6 mr-3">
+          <DatePickerComp
+            date={selectedDate}
+            onDateChange={setSelectedDate}
+          />
+          <button
+            type="button"
+            onClick={handleClick}
+            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            {loadingQuery || loadingMutation ? "Loading..." : "Get data"}
+          </button>
+        </div>
+        {(errorQuery || errorMutation) && <p className="text-red-500">Error loading data!</p>}
         <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6 list-none">
-          {Array.isArray(formValues) ? formValues.map((incomeItem) => (
+          {formValues?.length > 0 ? formValues.map((incomeItem) => (
             <li key={incomeItem.id} className="mt-4">
               <p className="border-b border-gray-900/10 -ml-4 mb-4" />
               <h2 className="text-lg font-medium text-gray-900 ">{incomeItem.title}</h2>
@@ -63,17 +144,17 @@ const IncomesForm = ({ incomes }: { incomes: Incomes[] }) => {
                   <li key={subIncomeItem.id} className="relative group mt-2 flex items-baseline">
                     <div className="mt-2">
                       <input
-                        id={subIncomeItem.id}
+                        id={subIncomeItem.id.toString()}
                         name={subIncomeItem.description}
                         type="number"
                         value={subIncomeItem.sum}
                         onChange={(e) => handleOnChange(e, incomeItem.id, subIncomeItem.id)}
-                        placeholder={subIncomeItem.sum}
+                        placeholder={subIncomeItem.sum.toString()}
                         className="block w-36 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                       />
                     </div>
 
-                    <label htmlFor={subIncomeItem.id} className="block text-base lg:text-lg ml-3">
+                    <label htmlFor={subIncomeItem.id.toString()} className="block text-base lg:text-lg ml-3">
                       {`-  ${subIncomeItem.description}`}
                     </label>
 
