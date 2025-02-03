@@ -9,8 +9,11 @@ export class IncomeResolver {
   constructor(private incomeService: IncomeService) {}
 
   @Query(() => [IncomeModel])
-  async income() {
-    return this.incomeService.getIncomes();
+  async income(
+    @Args('startDate') startDate: string,
+    @Args('endDate') endDate: string,
+  ): Promise<IncomeModel[]> {
+    return this.incomeService.getIncomes(startDate, endDate);
   }
 
   @Query(() => IncomeModel)

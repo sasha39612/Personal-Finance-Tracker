@@ -2,6 +2,7 @@ import BarChatIncomes from "@/components/charts/BarChatIncomes";
 import BarChatOutcomes from "@/components/charts/BarChatOutcomes";
 import BarChatSaving from "@/components/charts/BarChatSaving";
 import Period from "@/components/period/Period";
+// import { incomes } from "@/datum/dates";
 // import { mutateRSC, queryRSC } from "@/lib/fetch-data";
 
 // const variables = {
@@ -22,13 +23,28 @@ import Period from "@/components/period/Period";
 //         },
 //       ],
 //     },
+//     {
+//       title: "Earned Income_111",
+//       entities: [
+//         {
+//           description: "Salary/ Wages",
+//           tooltip: "Income from full-time or part-time employment.",
+//           sum: 12121,
+//         },
+//         {
+//           description: "Overtime",
+//           tooltip: "Additional earnings for working beyond standard hours.",
+//           sum: 3232,
+//         },
+//       ],
+//     },
 //   ],
 // };
 
 export default async function Home() {
   // const incomes = await queryRSC()
   // console.log('incomes', incomes)
-  
+
   // const input = await mutateRSC(variables)
   //   console.log('input', input)
   
