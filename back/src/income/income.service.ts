@@ -18,6 +18,7 @@ export class IncomeService {
   ) {}
 
   async createIncome(incomeData: IncomeInput): Promise<Income> {
+    let savedIncome: Income;
     const incomeDB = await this.incomeRepository.find({
       where: {
         datum: Between(
@@ -38,20 +39,22 @@ export class IncomeService {
     });
 
     if (incomeDB?.length) {
-      const incomeUpdated = {
+      savedIncome = await this.incomeRepository.save({
         ...incomeDB[0],
         categories,
-      };
-
-      return this.incomeRepository.save(incomeUpdated);
+      });
+    } else {
+      const income = this.incomeRepository.create({
+        ...incomeData,
+        categories,
+      });
+      savedIncome = await this.incomeRepository.save(income);
     }
 
-    const income = this.incomeRepository.create({
-      ...incomeData,
-      categories,
+    return this.incomeRepository.findOne({
+      where: { id: savedIncome.id },
+      relations: ['categories', 'categories.entities'],
     });
-
-    return this.incomeRepository.save(income);
   }
 
   async getIncomeById(id: number): Promise<IncomeModel> {

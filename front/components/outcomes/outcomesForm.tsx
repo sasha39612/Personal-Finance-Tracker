@@ -15,10 +15,10 @@ export interface Outcomes {
   entities: Entity[],
 }
 
+
 const OutcomesForm = ({ outcomes }: { outcomes: Outcomes[] }) => {
   const [formValues, setFormValues] = useState(outcomes);
   const [selectedDate, setSelectedDate] = useState(new Date());
-
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, incomeId: string, entityId: string) => {
     const newValue = e.target.value;
