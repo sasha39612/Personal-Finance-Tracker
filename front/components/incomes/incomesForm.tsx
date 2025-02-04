@@ -4,15 +4,15 @@ import DatePickerComp from "../datepicker/DatePickerComp";
 import { Incomes } from "@/lib/types";
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { format, startOfDay, endOfDay } from "date-fns";
-import getCategories from "@/lib/getcategories";
+import getCategories from "@/lib/getCategories";
 
 interface QueryResult {
   income: Incomes[];
 }
 
-type FetchIncomeFunction = (params: { variables: { startDate: string; endDate: string } }) => Promise<any>;
+type FetchIncomeFunction = (params: { variables: { startDate: string; endDate: string } }) => Promise<unknown>;
 
-export const queryRSCgql = gql`
+export const GET_INCOME = gql`
   query Income($startDate: String!, $endDate: String!) {
     income(startDate: $startDate, endDate: $endDate) {
       id
@@ -34,10 +34,13 @@ export const queryRSCgql = gql`
 const CREATE_INCOME = gql`
   mutation CreateIncome($incomeData: IncomeInput!) {
     createIncome(incomeData: $incomeData) {
+      id
       datum
       categories {
+        id
         title
            entities {
+                id
                 description
                 tooltip
                 sum
@@ -47,56 +50,52 @@ const CREATE_INCOME = gql`
   }
 `;
 
-const getData = (fetchIncome: FetchIncomeFunction, selectedDate: Date) => fetchIncome({
-  variables: {
-    startDate: format(startOfDay(selectedDate), "yyyy-MM-dd'T'00:00:00XXX"),
-    endDate: format(endOfDay(selectedDate), "yyyy-MM-dd'T'23:59:59XXX"),
-  },
-});
+const getData = (fetchIncome: FetchIncomeFunction, selectedDate: Date) =>
+  fetchIncome({
+    variables: {
+      startDate: format(startOfDay(selectedDate), "yyyy-MM-dd'T'00:00:00XXX"),
+      endDate: format(endOfDay(selectedDate), "yyyy-MM-dd'T'23:59:59XXX"),
+    },
+  });
 
 const IncomesForm = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [formValues, setFormValues] = useState<Incomes["categories"]>([]);
   const [fetchIncome, { data: dataQuery, loading: loadingQuery, error: errorQuery }] = useLazyQuery<QueryResult>(
-    queryRSCgql
+    GET_INCOME
   );
-  const [createIncome, { data: dataMutation, loading: loadingMutation, error: errorMutation }] = useMutation(CREATE_INCOME);
-
+  const [createIncome, { loading: loadingMutation, error: errorMutation }] = useMutation(CREATE_INCOME);
 
   const handleClick = () => {
-    getData(fetchIncome, selectedDate)
+    getData(fetchIncome, selectedDate);
+
+    if (dataQuery?.income?.length) {
+      setFormValues(dataQuery.income[0].categories ?? []);
+    }
   }
 
   useEffect(() => {
     if (dataQuery?.income?.length) {
       setFormValues(dataQuery.income[0].categories ?? []);
     }
-    if (dataMutation?.income?.length) {
-      setFormValues(dataMutation.income[0].categories ?? []);
-    }
-  }, [dataQuery, dataMutation]);
+  }, [dataQuery]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, incomeId: number, entityId: number) => {
     const newValue = Number(e.target.value);
 
     setFormValues((prevValues) =>
-      prevValues.map((income) =>
-        income.id === incomeId
-          ? {
-            ...income,
-            entities: income.entities.map((entity) =>
-              entity.id === entityId ? { ...entity, sum: newValue } : entity
-            ),
-          }
-          : income
+      prevValues.map((income) => ({
+        ...income,
+        entities: income.entities.map((entity) =>
+          entity.id === entityId ? { ...entity, sum: newValue } : entity
+        ),
+      })
       )
     );
   };
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted with values:", formValues);
-    console.log('selectedDate', selectedDate)
     const categories = getCategories(formValues)
     try {
       const response = await createIncome({
@@ -106,9 +105,16 @@ const IncomesForm = () => {
             categories: categories,
           }
         }
-      })
+      });
 
-      console.log('response.data.createIncome.categories', response.data)
+      const resultDatum = response.data.createIncome.datum;
+      const resultCategories = response.data.createIncome.categories;
+      if (resultDatum) {
+        setSelectedDate(new Date(resultDatum))
+      }
+      if (resultCategories) {
+        setFormValues(resultCategories)
+      }
     } catch (err) {
       console.log('err', err)
     }
@@ -174,7 +180,7 @@ const IncomesForm = () => {
 
       <p className="border-b border-gray-900/10 -ml-4 mt-4" />
       <div className="mt-6 flex items-center justify-end gap-x-6 mr-3">
-        <button type="button" className="text-sm/6 font-semibold text-gray-900">
+        <button type="button" onClick={handleClick} className="text-sm/6 font-semibold text-gray-900">
           Cancel
         </button>
         <button
