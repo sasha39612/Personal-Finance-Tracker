@@ -5,6 +5,7 @@ import { ConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { IncomeModule } from './income/income.module';
+import { OutcomeModule } from './outcome/outcome.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { IncomeModule } from './income/income.module';
     ConfigModule,
     DatabaseModule,
     IncomeModule,
+    OutcomeModule,
   ],
 })
 export class AppModule {}

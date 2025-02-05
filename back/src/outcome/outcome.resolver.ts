@@ -1,0 +1,24 @@
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { OutcomeModel } from './models/outcome.model';
+import { OutcomeService } from './outcome.service';
+import { OutcomeInput } from './dto/outcomes.input';
+
+@Resolver(() => OutcomeModel)
+export class OutcomeResolver {
+  constructor(private outcomeService: OutcomeService) {}
+
+  @Query(() => [OutcomeModel])
+  async outcome(
+    @Args('startDate') startDate: string,
+    @Args('endDate') endDate: string,
+  ): Promise<OutcomeModel[]> {
+    return this.outcomeService.getOutcomes(startDate, endDate);
+  }
+
+  @Mutation(() => OutcomeModel)
+  createOutcome(
+    @Args('outcomeData') outcomeData: OutcomeInput,
+  ): Promise<OutcomeModel> {
+    return this.outcomeService.createOutcome(outcomeData);
+  }
+}

@@ -53,7 +53,7 @@ export class AddInitialDataToIncome1737380983964 implements MigrationInterface {
         // Insert the initial data into the "income" table
         const incomeInsertResult = await queryRunner.query(`
             INSERT INTO "income" ("datum") 
-            VALUES ('2020-05-12T23:50:21.817Z') 
+            VALUES ('1970-01-01T20:10:21.817Z') 
             RETURNING "id"
         `);
         const incomeId = incomeInsertResult[0].id;
