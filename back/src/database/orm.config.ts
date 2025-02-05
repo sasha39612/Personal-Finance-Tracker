@@ -16,6 +16,7 @@ export const getOrmConfig = (env: Config): TypeOrmModuleOptions => {
     database: env.DB_NAME,
     migrationsRun: process.env.MODE_ENV !== 'TEST',
     autoLoadEntities: true,
+    synchronize: process.env.MODE_ENV === 'DEV', // ❗Enable only in development
     migrations: [resolve(__dirname, './migrations/*{.ts,.js}')],
     entities: [resolve(__dirname, '../**/*.entity{.ts,.js}')],
     // logging: ['error]
