@@ -61,26 +61,26 @@ const getData = (fetchIncome: FetchIncomeFunction, selectedDate: Date) =>
 const IncomesForm = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [formValues, setFormValues] = useState<Incomes["categories"]>([]);
+  const [updateQuery, setUpdateQuery] = useState(false);
+
   const [fetchIncome, { data: dataQuery, loading: loadingQuery, error: errorQuery }] = useLazyQuery<QueryResult>(
-    GET_INCOME
+    GET_INCOME,
+    { fetchPolicy: "network-only" } // Always fetch fresh data
   );
   const [createIncome, { loading: loadingMutation, error: errorMutation }] = useMutation(CREATE_INCOME);
 
   const handleClick = () => {
     getData(fetchIncome, selectedDate);
-
-    if (dataQuery?.income?.length) {
-      setFormValues(dataQuery.income[0].categories ?? []);
-    }
+    setUpdateQuery(() => !updateQuery)
   }
 
   useEffect(() => {
     if (dataQuery?.income?.length) {
       setFormValues(dataQuery.income[0].categories ?? []);
     }
-  }, [dataQuery]);
+  }, [dataQuery, updateQuery]);
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, incomeId: number, entityId: number) => {
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, entityId: number) => {
     const newValue = Number(e.target.value);
 
     setFormValues((prevValues) =>
@@ -154,7 +154,7 @@ const IncomesForm = () => {
                         name={subIncomeItem.description}
                         type="number"
                         value={subIncomeItem.sum}
-                        onChange={(e) => handleOnChange(e, incomeItem.id, subIncomeItem.id)}
+                        onChange={(e) => handleOnChange(e, subIncomeItem.id)}
                         placeholder={subIncomeItem.sum.toString()}
                         className="block w-36 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                       />

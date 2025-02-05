@@ -1,8 +1,7 @@
-import OutcomesForm from "@/components/outcomes/OutcomesForm"
-import { outcomes  } from '../../datum/dates'
+import OutcomesForm from "@/components/outcomes/outcomesForm"
 
 const Outcomes = () => {
-  return <OutcomesForm outcomes={outcomes} />
+  return <OutcomesForm />
 }
 
 export default Outcomes;
