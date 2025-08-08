@@ -9,8 +9,11 @@ import {
   startOfDay,
   endOfDay,
   startOfMonth,
+  startOfYear,
+  endOfYear,
   endOfMonth,
   getDate,
+  getMonth,
 } from 'date-fns';
 import { IncomePeriodModel } from './models/income-period.model';
 
@@ -62,11 +65,16 @@ export class IncomeService {
   }
 
   async getIncomeById(id: number): Promise<IncomeModel> {
-    const income = await this.incomeRepository.findOne({
+    try {
+      const income = await this.incomeRepository.findOne({
       where: { id },
       relations: ['categories', 'categories.entities'],
     });
     return plainToInstance(IncomeModel, income);
+  } catch (error) {
+      console.error('Error fetching income by ID:', error);
+      throw new Error('Income not found');
+    }
   }
 
   async getIncomes(startDate: string, endDate: string): Promise<IncomeModel[]> {
@@ -102,86 +110,109 @@ export class IncomeService {
   ): Promise<IncomePeriodModel> {
     const startInitial = startOfDay(new Date('1970-01-01'));
     const endInitial = endOfDay(new Date('1970-01-01'));
+    let startPeriod = startInitial;
+    let endPeriod = endInitial;
+
+    const randomRGBA = (border?: string) => {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      const a = Math.random().toFixed(2); // Alpha between 0.00 and 1.00
+      return `rgba(${r}, ${g}, ${b}, ${border ? a : 1})`;
+    };
 
     if (period === 'month') {
-      const start = startDate
-        ? startOfMonth(new Date(startDate))
-        : startInitial;
-      const end = endDate ? endOfMonth(new Date(endDate)) : endInitial;
-      const incomes = await this.incomeRepository.find({
-        where: {
-          datum: Between(startOfDay(start), endOfDay(end)),
-        },
-        relations: ['categories', 'categories.entities'],
-      });
+      startPeriod = startDate ? startOfMonth(new Date(startDate)) : startInitial;
+      endPeriod = endDate ? endOfMonth(new Date(endDate)) : endInitial;
+    } else if (period === 'year') { 
+      startPeriod = startDate ? startOfYear(new Date(startDate)) : startInitial;
+      endPeriod = endDate ? endOfYear(new Date(endDate)) : endInitial;
+    } else if (period === 'day') {
+      startPeriod = startDate ? new Date(startDate) : startInitial;
+      endPeriod = endDate ? new Date(endDate) : endInitial;
+    }
 
-      const incomeUpdated = incomes
-        .map((income) => plainToInstance(IncomeModel, income))
-        .sort(
-          (a, b) => new Date(a.datum).getTime() - new Date(b.datum).getTime(),
-        );
+    const incomes = await this.incomeRepository.find({
+      where: {
+        datum: Between(startOfDay(startPeriod), endOfDay(endPeriod)),
+      },
+      relations: ['categories', 'categories.entities'],
+    });
 
-      console.log('incomesUpdate', incomeUpdated);
-      const randomRGBA = (border?: string) => {
-        const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);
-        const b = Math.floor(Math.random() * 256);
-        const a = Math.random().toFixed(2); // Alpha between 0.00 and 1.00
-        return `rgba(${r}, ${g}, ${b}, ${border ? a : 1})`;
-      };
+    const incomeUpdated = incomes
+      .map((income) => plainToInstance(IncomeModel, income))
+      .sort(
+        (a, b) => new Date(a.datum).getTime() - new Date(b.datum).getTime(),
+    );
 
-      const result: IncomePeriodModel = {
-        labels: [],
-        datasets: [],
-      };
+    const result: IncomePeriodModel = {
+      labels: [],
+      datasets: [],
+    };
 
-      incomeUpdated.map((data) => {
+    if (period === 'year') {
+      // Group incomes by month
+      const monthlySums: { [month: string]: number } = {};
+      incomeUpdated.forEach((data) => {
+        const monthKey = new Date(data.datum).getFullYear() + '-' + (getMonth(new Date(data.datum)) + 1).toString().padStart(2, '0');
         let sumResult = 0;
-        const dayOfMonth = getDate(new Date(data.datum));
-        result.labels.push(dayOfMonth.toString());
-
         data.categories.forEach((category) => {
           sumResult += category.entities.reduce((acc, cur) => acc + cur.sum, 0);
         });
-
-        if (!result.datasets.length) {
-          result.datasets.push({
-            data: [],
-            backgroundColor: [],
-            borderColor: [],
-            borderWidth: 1,
-          });
+        if (!monthlySums[monthKey]) {
+          monthlySums[monthKey] = 0;
         }
-
-        result.datasets[0].data.push(sumResult);
+        monthlySums[monthKey] += sumResult;
+      });
+    
+      // Clear previous labels and datasets
+      result.labels = [];
+      result.datasets = [{
+        data: [],
+        backgroundColor: [],
+        borderColor: [],
+        borderWidth: 1,
+      }];
+    
+      Object.entries(monthlySums).forEach(([monthKey, sum]) => {
+        // Use first day of month for label
+        const firstDayOfMonth = new Date(monthKey + '-01').toISOString().split('T')[0];
+        result.labels.push(firstDayOfMonth);
+        result.datasets[0].data.push(sum);
         result.datasets[0].backgroundColor.push(randomRGBA());
         result.datasets[0].borderColor.push(randomRGBA('border'));
       });
 
-      console.log('result', result);
-
-      // incomeChats = {
-      //   labels: ['John', 'Jane', 'Doe'],
-      //   datasets: [
-      //     {
-      //       data: [34, 64, 23],
-      //       backgroundColor: [
-      //         'rgba(255, 99, 132, 0.2)',
-      //         'rgba(255, 159, 64, 0.2)',
-      //         'rgba(255, 205, 86, 0.2)',
-      //       ],
-      //       borderColor: [
-      //         'rgb(255, 99, 132)',
-      //         'rgb(255, 159, 64)',
-      //         'rgb(255, 205, 86)',
-      //       ],
-      //       borderWidth: 1,
-      //     },
-      //   ],
-      // };
-
       return result;
-    } else if (period === 'year') {
     }
+
+    incomeUpdated.map((data) => {
+      let sumResult = 0;
+      if (period === 'month') {
+        const dayOfMonth = (getDate(new Date(data.datum))).toString();
+        result.labels.push(dayOfMonth);
+      } else if (period === 'day') {
+        result.labels.push(new Date(data.datum).toISOString().split('T')[0]);
+      }
+
+      data.categories.forEach((category) => {
+        sumResult += category.entities.reduce((acc, cur) => acc + cur.sum, 0);
+      });
+
+      if (!result.datasets.length) {
+        result.datasets.push({
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
+          borderWidth: 1,
+        });
+      }
+
+      result.datasets[0].data.push(sumResult);
+      result.datasets[0].backgroundColor.push(randomRGBA());
+      result.datasets[0].borderColor.push(randomRGBA('border'));
+    });
+
+    return result;
   }
 }

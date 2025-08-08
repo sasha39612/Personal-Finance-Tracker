@@ -4,7 +4,7 @@ import DatePickerComp from "../datepicker/DatePickerComp";
 import { Incomes } from "@/lib/types";
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { format, startOfDay, endOfDay } from "date-fns";
-import getCategories from "@/lib/getCategories";
+import getCategories from "@/lib/get-categories";
 
 interface QueryResult {
   income: Incomes[];
