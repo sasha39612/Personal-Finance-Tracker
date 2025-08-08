@@ -1,3 +1,10 @@
+export interface Datasets {
+  data: number[];
+  backgroundColor: string[];
+  borderColor: string[];
+  borderWidth: number;
+}
+
 export interface Entities {
   id: number;
   description: string;
@@ -14,6 +21,11 @@ export interface Category {
 export interface Incomes {
   datum: Date;
   categories: Array<Category>;
+}
+
+export interface IncomeChats {
+  labels: [string];
+  datasets: Array<Datasets>;
 }
 
 export type EntitiesInput = Omit<Entities, 'id'>

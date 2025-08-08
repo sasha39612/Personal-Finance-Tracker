@@ -11,11 +11,32 @@ import {
   Legend,
   ChartConfiguration,
 } from "chart.js";
+import { IncomeChats } from "@/lib/types";
+
+// const dataFetch = {
+//   labels: ["John", "Jane", "Doe"],
+//   datasets: [
+//     {
+//       data: [34, 64, 23],
+//       backgroundColor: [
+//         "rgba(255, 99, 132, 0.2)",
+//         "rgba(255, 159, 64, 0.2)",
+//         "rgba(255, 205, 86, 0.2)",
+//       ],
+//       borderColor: [
+//         "rgb(255, 99, 132)",
+//         "rgb(255, 159, 64)",
+//         "rgb(255, 205, 86)",
+//       ],
+//       borderWidth: 1,
+//     },
+//   ],
+// }
 
 // Register necessary components
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const BarChatSaving: React.FC = () => {
+const BarChatSaving = ({ incomeFetch }: { incomeFetch: IncomeChats }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<ChartJS | null>(null);
 
@@ -29,25 +50,7 @@ const BarChatSaving: React.FC = () => {
       if (context) {
         const config: ChartConfiguration<"bar", number[], string> = {
           type: "bar",
-          data: {
-            labels: ["John", "Jane", "Doe"],
-            datasets: [
-              {
-                data: [34, 64, 23],
-                backgroundColor: [
-                  "rgba(255, 99, 132, 0.2)",
-                  "rgba(255, 159, 64, 0.2)",
-                  "rgba(255, 205, 86, 0.2)",
-                ],
-                borderColor: [
-                  "rgb(255, 99, 132)",
-                  "rgb(255, 159, 64)",
-                  "rgb(255, 205, 86)",
-                ],
-                borderWidth: 1,
-              },
-            ],
-          },
+          data: incomeFetch,
           options: {
             responsive: true,
             scales: {
@@ -70,7 +73,7 @@ const BarChatSaving: React.FC = () => {
         chartInstanceRef.current.destroy();
       }
     };
-  }, []);
+  }, [incomeFetch]);
 
   return (
     <div
