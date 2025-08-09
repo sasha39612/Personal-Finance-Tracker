@@ -1,15 +1,26 @@
 'use client'
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import DatePickerComp from '../datepicker/DatePickerComp';
 
-const Period = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedPeriod, setSelectedPeriod] = useState('day')
+type PeriodProps = {
+  setStartDate: Dispatch<SetStateAction<string>>;
+  setEndDate: Dispatch<SetStateAction<string>>;
+  setSelectedPeriod: Dispatch<SetStateAction<string>>;
+};
 
+const Period = ({ setStartDate, setEndDate, setSelectedPeriod }: PeriodProps) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [period, setPeriod] = useState('day');
   const handlePeriodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPeriod(e.target.value);
     setSelectedPeriod(e.target.value);
   };
-  console.log('selectedPeriod', selectedPeriod)
+
+  useEffect(() => {
+    setStartDate(selectedDate.toISOString());
+    setEndDate(selectedDate.toISOString());
+  }, [selectedDate]);
+
   return (
     <div className='relative w-full h-full lg:col-span-1 lg:row-start-1 lg:row-end-1'>
       <DatePickerComp
@@ -22,7 +33,7 @@ const Period = () => {
         <div className="mt-2 space-y-2">
           <div className="flex items-center gap-x-3">
             <input
-              defaultChecked
+              checked={period === 'day'}
               id="period-day"
               name="period"
               type="radio"
@@ -36,6 +47,7 @@ const Period = () => {
           </div>
           <div className="flex items-center gap-x-3">
             <input
+              checked={period === 'month'}
               id="period-month"
               name="period"
               type="radio"
@@ -49,6 +61,7 @@ const Period = () => {
           </div>
           <div className="flex items-center gap-x-3">
             <input
+              checked={period === 'year'}
               id="period-year"
               name="period"
               type="radio"

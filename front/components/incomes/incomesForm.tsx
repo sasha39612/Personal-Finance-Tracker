@@ -66,13 +66,17 @@ const IncomesForm = () => {
   );
   const [createIncome, { loading: loadingMutation, error: errorMutation }] = useMutation(CREATE_INCOME);
 
+  const getData = (fetchIncome: FetchIncomeFunction, selectedDate: Date) =>
+    fetchIncome({
+      variables: {
+        startDate: startOfDay(selectedDate).toISOString(),
+        endDate: endOfDay(selectedDate).toISOString(),
+      },
+    });
+
   const handleClick = () => {
     getData(fetchIncome, selectedDate);
-
-    if (dataQuery?.income?.length) {
-      setFormValues(dataQuery.income[0].categories ?? []);
-    }
-  }
+    };
 
   useEffect(() => {
     if (dataQuery?.income?.length) {
@@ -96,12 +100,12 @@ const IncomesForm = () => {
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const categories = getCategories(formValues)
+    const categories = getCategories(formValues);
     try {
       const response = await createIncome({
         variables: {
           incomeData: {
-            datum: selectedDate,
+            datum: selectedDate.toISOString(),
             categories: categories,
           }
         }
@@ -110,13 +114,13 @@ const IncomesForm = () => {
       const resultDatum = response.data.createIncome.datum;
       const resultCategories = response.data.createIncome.categories;
       if (resultDatum) {
-        setSelectedDate(new Date(resultDatum))
+        setSelectedDate(new Date(resultDatum));
       }
       if (resultCategories) {
-        setFormValues(resultCategories)
+        setFormValues(resultCategories);
       }
     } catch (err) {
-      console.log('err', err)
+      console.log('err', err);
     }
   }
   return (

@@ -30,20 +30,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Suspense fallback={<Loading />}>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-7xl ml-[auto] mr-[auto]`}
-        >
-          <ApolloWrapper>
-            <Header />
-            <main className="font-[family-name:var(--font-geist-sans)]">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-7xl ml-[auto] mr-[auto]`}
+      >
+        <ApolloWrapper>
+          <Header />
+          <main className="font-[family-name:var(--font-geist-sans)]">
+            <Suspense fallback={<Loading />}>
               {children}
-            </main>
-            <Footer />
-            <div id="portal-root"></div>
-          </ApolloWrapper>
-        </body>
-      </Suspense>
+            </Suspense>
+          </main>
+          <Footer />
+          <div id="portal-root"></div>
+        </ApolloWrapper>
+      </body>
     </html>
   );
 }

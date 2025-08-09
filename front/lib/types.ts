@@ -28,6 +28,11 @@ export interface IncomeChats {
   datasets: Array<Datasets>;
 }
 
+export interface OutcomeChats {
+  labels: [string];
+  datasets: Array<Datasets>;
+}
+
 export type EntitiesInput = Omit<Entities, 'id'>
 
 export interface CategoryInput {
