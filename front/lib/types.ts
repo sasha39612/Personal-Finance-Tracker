@@ -56,8 +56,3 @@ export interface CategoryInput {
   title: string;
   entities: Array<EntitiesInput>;
 }
-
-export interface IncomesInput extends Omit<Incomes, 'categories'> {
-  datum: Date;
-  categories: Array<CategoryInput>;
-}
