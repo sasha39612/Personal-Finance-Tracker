@@ -12,15 +12,32 @@ export interface Entities {
   sum: number;
 }
 
+export interface EntitiesOutcome {
+  id: number;
+  description: string;
+  sum: number;
+}
+
 export interface Category {
   id: number;
   title: string;
   entities: Array<Entities>;
 }
 
+export interface CategoryOutcome {
+  id: number;
+  title: string;
+  entities_outcome: Array<EntitiesOutcome>;
+}
+
 export interface Incomes {
   datum: Date;
   categories: Array<Category>;
+}
+
+export interface Outcomes {
+  datum: Date;
+  categories_outcome: Array<CategoryOutcome>;
 }
 
 export interface IncomeChats {

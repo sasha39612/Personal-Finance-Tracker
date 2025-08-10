@@ -5,7 +5,17 @@ import { Between, Repository } from 'typeorm';
 import { OutcomeModel } from './models/outcome.model';
 import { plainToInstance } from 'class-transformer';
 import { OutcomeInput } from './dto/outcomes.input';
-import { startOfDay, endOfDay } from 'date-fns';
+import {
+  startOfDay,
+  endOfDay,
+  startOfMonth,
+  startOfYear,
+  endOfYear,
+  endOfMonth,
+  getDate,
+  getMonth,
+} from 'date-fns';
+import { OutcomePeriodModel } from './models/outcome-period.model';
 
 @Injectable()
 export class OutcomeService {
@@ -97,4 +107,117 @@ export class OutcomeService {
 
     return outcomes.map((outcome) => plainToInstance(OutcomeModel, outcome));
   }
+
+  async getOutcomesChats(
+      startDate: string,
+      endDate: string,
+      period: 'day' | 'month' | 'year',
+    ): Promise<OutcomePeriodModel> {
+      const startInitial = startOfDay(new Date('1970-01-01'));
+      const endInitial = endOfDay(new Date('1970-01-01'));
+      let startPeriod = startInitial;
+      let endPeriod = endInitial;
+  
+      const randomRGBA = (border?: string) => {
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        const a = Math.random().toFixed(2); // Alpha between 0.00 and 1.00
+        return `rgba(${r}, ${g}, ${b}, ${border ? a : 1})`;
+      };
+  
+      if (period === 'month') {
+        startPeriod = startDate ? startOfMonth(new Date(startDate)) : startInitial;
+        endPeriod = endDate ? endOfMonth(new Date(endDate)) : endInitial;
+      } else if (period === 'year') { 
+        startPeriod = startDate ? startOfYear(new Date(startDate)) : startInitial;
+        endPeriod = endDate ? endOfYear(new Date(endDate)) : endInitial;
+      } else if (period === 'day') {
+        startPeriod = startDate ? new Date(startDate) : startInitial;
+        endPeriod = endDate ? new Date(endDate) : endInitial;
+      }
+  
+      const incomes = await this.outcomeRepository.find({
+        where: {
+          datum: Between(startOfDay(startPeriod), endOfDay(endPeriod)),
+        },
+        relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
+      });
+  
+      const incomeUpdated = incomes
+        .map((income) => plainToInstance(OutcomeModel, income))
+        .sort(
+          (a, b) => new Date(a.datum).getTime() - new Date(b.datum).getTime(),
+      );
+  
+      const result: OutcomePeriodModel = {
+        labels: [],
+        datasets: [],
+      };
+  
+      if (period === 'year') {
+        // Group incomes by month
+        const monthlySums: { [month: string]: number } = {};
+        incomeUpdated.forEach((data) => {
+          const monthKey = new Date(data.datum).getFullYear() + '-' + (getMonth(new Date(data.datum)) + 1).toString().padStart(2, '0');
+          let sumResult = 0;
+          data.categories_outcome.forEach((category) => {
+            sumResult += category.entities_outcome.reduce((acc, cur) => acc + cur.sum, 0);
+          });
+          if (!monthlySums[monthKey]) {
+            monthlySums[monthKey] = 0;
+          }
+          monthlySums[monthKey] += sumResult;
+        });
+      
+        // Clear previous labels and datasets
+        result.labels = [];
+        result.datasets = [{
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
+          borderWidth: 1,
+        }];
+      
+        Object.entries(monthlySums).forEach(([monthKey, sum]) => {
+          // Use first day of month for label
+          const firstDayOfMonth = new Date(monthKey + '-01').toISOString().split('T')[0];
+          result.labels.push(firstDayOfMonth);
+          result.datasets[0].data.push(sum);
+          result.datasets[0].backgroundColor.push(randomRGBA());
+          result.datasets[0].borderColor.push(randomRGBA('border'));
+        });
+  
+        return result;
+      }
+  
+      incomeUpdated.map((data) => {
+        let sumResult = 0;
+        if (period === 'month') {
+          const dayOfMonth = (getDate(new Date(data.datum))).toString();
+          result.labels.push(dayOfMonth);
+        } else if (period === 'day') {
+          result.labels.push(new Date(data.datum).toISOString().split('T')[0]);
+        }
+  
+        data.categories_outcome.forEach((category) => {
+          sumResult += category.entities_outcome.reduce((acc, cur) => acc + cur.sum, 0);
+        });
+  
+        if (!result.datasets.length) {
+          result.datasets.push({
+            data: [],
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1,
+          });
+        }
+  
+        result.datasets[0].data.push(sumResult);
+        result.datasets[0].backgroundColor.push(randomRGBA());
+        result.datasets[0].borderColor.push(randomRGBA('border'));
+      });
+  
+      return result;
+    }
 }

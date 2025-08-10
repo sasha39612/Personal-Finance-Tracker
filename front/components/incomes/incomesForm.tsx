@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import DatePickerComp from "../datepicker/DatePickerComp";
 import { Incomes } from "@/lib/types";
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
-import { format, startOfDay, endOfDay } from "date-fns";
-import getCategories from "@/lib/get-categories";
+import { startOfDay, endOfDay } from "date-fns";
+import { getIncomeCategories } from "@/lib/get-categories";
 
 interface QueryResult {
   income: Incomes[];
@@ -50,13 +50,13 @@ const CREATE_INCOME = gql`
   }
 `;
 
-const getData = (fetchIncome: FetchIncomeFunction, selectedDate: Date) =>
-  fetchIncome({
-    variables: {
-      startDate: format(startOfDay(selectedDate), "yyyy-MM-dd'T'00:00:00XXX"),
-      endDate: format(endOfDay(selectedDate), "yyyy-MM-dd'T'23:59:59XXX"),
-    },
-  });
+// const getData = (fetchIncome: FetchIncomeFunction, selectedDate: Date) =>
+//   fetchIncome({
+//     variables: {
+//       startDate: format(startOfDay(selectedDate), "yyyy-MM-dd'T'00:00:00XXX"),
+//       endDate: format(endOfDay(selectedDate), "yyyy-MM-dd'T'23:59:59XXX"),
+//     },
+//   });
 
 const IncomesForm = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -100,7 +100,7 @@ const IncomesForm = () => {
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const categories = getCategories(formValues);
+    const categories = getIncomeCategories(formValues);
     try {
       const response = await createIncome({
         variables: {
@@ -123,6 +123,7 @@ const IncomesForm = () => {
       console.log('err', err);
     }
   }
+
   return (
     <form className="ml-4" onSubmit={handleOnSubmit}>
       <div className="space-y-4">

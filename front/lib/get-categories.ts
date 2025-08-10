@@ -1,6 +1,6 @@
-import { Incomes } from "./types";
+import { Incomes, Outcomes } from "./types";
 
-const getCategories = (originalData: Incomes['categories']) => originalData.map(category => ({
+export const getIncomeCategories = (originalData: Incomes['categories']) => originalData.map(category => ({
     title: category.title,
     entities: category.entities.map(entity => ({
         description: entity.description,
@@ -9,4 +9,10 @@ const getCategories = (originalData: Incomes['categories']) => originalData.map(
     }))
 }));
 
-export default getCategories;
+export const getOutcomeCategories = (originalData: Outcomes['categories_outcome']) => originalData.map(category => ({
+    title: category.title,
+    entities_outcome: category.entities_outcome.map(entity => ({
+        description: entity.description,
+        sum: entity.sum
+    }))
+}));
