@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { CategoryModel } from './category.model';
+import { CategoryIncomeModel } from './category-income.model';
 
 @ObjectType()
 export class IncomeModel {
@@ -9,6 +9,6 @@ export class IncomeModel {
   @Field()
   datum: Date;
 
-  @Field(() => [CategoryModel])
-  categories: CategoryModel[];
+  @Field(() => [CategoryIncomeModel])
+  categories: CategoryIncomeModel[];
 }

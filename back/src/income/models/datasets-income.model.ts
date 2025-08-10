@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class DatasetsModel {
+export class DatasetsIncomeModel {
   @Field(() => [Number])
   data: number[];
 

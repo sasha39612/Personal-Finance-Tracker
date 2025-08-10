@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/categories.entity';
 import { Entities } from './entities/entities.entity';
 import { In, Repository } from 'typeorm';
-import { CategoryModel } from './models/category.model';
+import { CategoryIncomeModel } from './models/category-income.model';
 
 @Injectable()
-export class CategoryService {
+export class CategoryIncomeService {
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
@@ -20,14 +20,14 @@ export class CategoryService {
     });
   }
 
-  async getCategoryById(id: number): Promise<CategoryModel> {
+  async getCategoryById(id: number): Promise<CategoryIncomeModel> {
     return await this.categoryRepository.findOne({
       where: { id },
       relations: ['entities'],
     });
   }
 
-  async getCategories(): Promise<CategoryModel[]> {
+  async getCategories(): Promise<CategoryIncomeModel[]> {
     return await this.categoryRepository.find({
       relations: ['entities'],
     });
