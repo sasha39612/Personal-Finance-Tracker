@@ -43,6 +43,11 @@ const BarChatIncomes = ({ incomeFetch }: { incomeFetch: IncomeChats }) => {
                 beginAtZero: true,
               },
             },
+            plugins: {
+              legend: {
+                display: false, // hides entire legend
+              }
+            }
           },
         };
 

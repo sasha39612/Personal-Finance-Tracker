@@ -180,9 +180,9 @@ export class OutcomeService {
         }];
       
         Object.entries(monthlySums).forEach(([monthKey, sum]) => {
-          // Use first day of month for label
-          const firstDayOfMonth = new Date(monthKey + '-01').toISOString().split('T')[0];
-          result.labels.push(firstDayOfMonth);
+          // Use month number for label
+          const monthNumber = new Date(monthKey + '-01').getMonth() + 1;
+          result.labels.push(monthNumber.toString());
           result.datasets[0].data.push(sum);
           result.datasets[0].backgroundColor.push(randomRGBA());
           result.datasets[0].borderColor.push(randomRGBA('border'));

@@ -50,14 +50,6 @@ const CREATE_INCOME = gql`
   }
 `;
 
-// const getData = (fetchIncome: FetchIncomeFunction, selectedDate: Date) =>
-//   fetchIncome({
-//     variables: {
-//       startDate: format(startOfDay(selectedDate), "yyyy-MM-dd'T'00:00:00XXX"),
-//       endDate: format(endOfDay(selectedDate), "yyyy-MM-dd'T'23:59:59XXX"),
-//     },
-//   });
-
 const IncomesForm = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [formValues, setFormValues] = useState<Incomes["categories"]>([]);
@@ -179,7 +171,7 @@ const IncomesForm = () => {
               </ul>
             </li>
           ))
-            : <p>No income data available.</p>}
+            : <p>No income data yet. Please, press Get data button</p>}
         </ul>
       </div>
 

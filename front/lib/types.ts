@@ -41,12 +41,14 @@ export interface Outcomes {
 }
 
 export interface IncomeChats {
-  labels: [string];
+  labels: string[];
   datasets: Array<Datasets>;
 }
 
+export type SavingChats = IncomeChats
+
 export interface OutcomeChats {
-  labels: [string];
+  labels: string[];
   datasets: Array<Datasets>;
 }
 

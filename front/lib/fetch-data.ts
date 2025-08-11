@@ -57,22 +57,3 @@ export async function queryChatsOutcomeRSC(startDate: string, endDate: string, p
 
   return result.data.outcomeChats;
 }
-
-  export const queryRSCgql = gql`
-  query Income($startDate: String!, $endDate: String!) {
-    income(startDate: $startDate, endDate: $endDate) {
-      id
-      datum
-      categories {
-        id
-        title
-        entities {
-          id
-          description
-          tooltip
-          sum
-        }
-      }
-    }
-  }
-`;

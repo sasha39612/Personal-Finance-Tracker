@@ -11,32 +11,12 @@ import {
   Legend,
   ChartConfiguration,
 } from "chart.js";
-import { IncomeChats } from "@/lib/types";
-
-// const dataFetch = {
-//   labels: ["John", "Jane", "Doe"],
-//   datasets: [
-//     {
-//       data: [34, 64, 23],
-//       backgroundColor: [
-//         "rgba(255, 99, 132, 0.2)",
-//         "rgba(255, 159, 64, 0.2)",
-//         "rgba(255, 205, 86, 0.2)",
-//       ],
-//       borderColor: [
-//         "rgb(255, 99, 132)",
-//         "rgb(255, 159, 64)",
-//         "rgb(255, 205, 86)",
-//       ],
-//       borderWidth: 1,
-//     },
-//   ],
-// }
+import { SavingChats } from "@/lib/types";
 
 // Register necessary components
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const BarChartSaving = ({ incomeFetch }: { incomeFetch: IncomeChats }) => {
+const BarChartSaving = ({ savingFetch }: { savingFetch: SavingChats }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<ChartJS | null>(null);
 
@@ -48,8 +28,8 @@ const BarChartSaving = ({ incomeFetch }: { incomeFetch: IncomeChats }) => {
 
       const context = chartRef.current.getContext("2d");
       if (context) {
-        // Deep clone incomeFetch to avoid mutation errors
-        const clonedData = JSON.parse(JSON.stringify(incomeFetch));
+        // Deep clone savingFetch to avoid mutation errors
+        const clonedData = JSON.parse(JSON.stringify(savingFetch));
         const config: ChartConfiguration<"bar", number[], string> = {
           type: "bar",
           data: clonedData,
@@ -63,6 +43,11 @@ const BarChartSaving = ({ incomeFetch }: { incomeFetch: IncomeChats }) => {
                 beginAtZero: true,
               },
             },
+            plugins: {
+              legend: {
+                display: false, // hides entire legend
+              }
+            }
           },
         };
 
@@ -75,7 +60,7 @@ const BarChartSaving = ({ incomeFetch }: { incomeFetch: IncomeChats }) => {
         chartInstanceRef.current.destroy();
       }
     };
-  }, [incomeFetch]);
+  }, [savingFetch]);
 
   return (
     <div

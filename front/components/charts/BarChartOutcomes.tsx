@@ -43,6 +43,11 @@ const BarChatOutcomes = ({ outcomeFetch }: { outcomeFetch: OutcomeChats }) => {
                 beginAtZero: true,
               },
             },
+            plugins: {
+              legend: {
+                display: false, // hides entire legend
+              }
+            }
           },
         };
 
