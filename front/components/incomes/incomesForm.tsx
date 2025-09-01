@@ -51,8 +51,16 @@ const CREATE_INCOME = gql`
 `;
 
 const IncomesForm = () => {
+
+
+  /* STATES */
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [formValues, setFormValues] = useState<Incomes["categories"]>([]);
+
+
+  /* API INTERACTION LAYER */
+
   const [fetchIncome, { data: dataQuery, loading: loadingQuery, error: errorQuery }] = useLazyQuery<QueryResult>(
     GET_INCOME
   );
@@ -65,16 +73,13 @@ const IncomesForm = () => {
         endDate: endOfDay(selectedDate).toISOString(),
       },
     });
+  
+  
+  /* EVENTS HANDLERS */
 
   const handleClick = () => {
     getData(fetchIncome, selectedDate);
     };
-
-  useEffect(() => {
-    if (dataQuery?.income?.length) {
-      setFormValues(dataQuery.income[0].categories ?? []);
-    }
-  }, [dataQuery]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, incomeId: number, entityId: number) => {
     const newValue = Number(e.target.value);
@@ -116,6 +121,17 @@ const IncomesForm = () => {
     }
   }
 
+
+  /* SIDE EFFECT */
+
+  useEffect(() => {
+    if (dataQuery?.income?.length) {
+      setFormValues(dataQuery.income[0].categories ?? []);
+    }
+  }, [dataQuery]);
+
+
+  /* RENDER */
   return (
     <form className="ml-4" onSubmit={handleOnSubmit}>
       <div className="space-y-4">
@@ -181,6 +197,7 @@ const IncomesForm = () => {
           Cancel
         </button>
         <button
+          disabled={loadingQuery || loadingMutation}
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >

@@ -50,8 +50,15 @@ const CREATE_OUTCOME = gql`
 
 
 const OutcomesForm = () => {
+
+  /* STATES */
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [formValues, setFormValues] = useState<Outcomes["categories_outcome"]>([]);
+
+
+  /* API INTERACTION LAYER */
+
   const [fetchOutcome, { data: dataQuery, loading: loadingQuery, error: errorQuery }] = useLazyQuery<QueryResult>(
     GET_OUTCOME
   );
@@ -65,15 +72,12 @@ const OutcomesForm = () => {
       },
     });
 
+
+  /* EVENT HANDLERS */
+
   const handleClick = () => {
     getData(fetchOutcome, selectedDate);
   };
-
-  useEffect(() => {
-    if (dataQuery?.outcome?.length) {
-      setFormValues(dataQuery.outcome[0].categories_outcome ?? []);
-    }
-  }, [dataQuery]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, outComeId: number, entityId: number) => {
     const newValue = Number(e.target.value);
@@ -113,6 +117,17 @@ const OutcomesForm = () => {
       console.log('err', err);
     }
   }
+
+  /* SIDE EFFECTS */
+
+  useEffect(() => {
+    if (dataQuery?.outcome?.length) {
+      setFormValues(dataQuery.outcome[0].categories_outcome ?? []);
+    }
+  }, [dataQuery]);
+
+
+  /* RENDER */
 
   return (
     <form className="ml-4" onSubmit={handleOnSubmit}>

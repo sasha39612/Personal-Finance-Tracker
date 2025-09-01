@@ -9,6 +9,10 @@ const DatePickerComp = ({
   date: Date;
   onDateChange: Dispatch<SetStateAction<Date>>;
 }) => {
+
+
+  /* EVENT HANDLERS */
+
   const handleDateChange = (selectedDate: Date | null) => {
     onDateChange(selectedDate || new Date());
   };
