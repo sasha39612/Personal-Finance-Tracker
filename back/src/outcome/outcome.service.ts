@@ -68,14 +68,6 @@ export class OutcomeService {
     });
   }
 
-  async getOutcomeById(id: number): Promise<OutcomeModel> {
-    const outcome = await this.outcomeRepository.findOne({
-      where: { id },
-      relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
-    });
-    return plainToInstance(OutcomeModel, outcome);
-  }
-
   async getOutcomes(
     startDate: string,
     endDate: string,
