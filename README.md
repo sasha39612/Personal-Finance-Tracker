@@ -95,3 +95,13 @@ Node.js 20.x (LTS)
 PostgreSQL (local or via Docker)
 
 Docker (recommended for DB setup)
+
+## 💡 Why This Project Adds Value to My Portfolio
+
+✅ **Full-stack scope** – covers both backend (NestJS, GraphQL, PostgreSQL) and frontend (Next.js, React, Apollo Client).  
+✅ **Backend-first architecture** – demonstrates API design, database migrations and Dockerized DB setup.  
+✅ **Enterprise practices** – environment variable configs, strict TypeScript, ESLint + Prettier, and clean code organization.  
+✅ **Testing discipline** – includes end-to-end tests with Jest to validate reliability.  
+✅ **GraphQL expertise** – schema-first approach with resolvers, TypeORM entities, and Apollo Server integration.  
+✅ **Next.js 15 adoption** – modern frontend stack with React 19, Apollo Client, and chart visualizations for API data.  
+
