@@ -29,7 +29,7 @@ Create a .env.local file in the root directory and fill in the variables based o
 
 ## 🏃 Running the Project
 
-###Development
+### Development
 
 ```bash
 $ npm run dev
@@ -44,13 +44,14 @@ $ npm run start
 
 ## 🎨 Features
 
-## 💰 Transactions Management – add, update, delete expenses and incomes
+#### 💰 Transactions Management – add, update, delete expenses and incomes
 
-## 📊 Data Visualization – charts and statistics powered by Chart.js
+#### 📊 Data Visualization – charts and statistics powered by Chart.js
 
-## 📅 Date-based Filtering – track transactions with a calendar UI
+#### 📅 Date-based Filtering – track transactions with a calendar UI
 
-## ⚡ GraphQL Integration – Apollo Client for optimized data fetching
+#### ⚡ GraphQL Integration – Apollo Client for optimized data fetching
+
 
 
 ## 📱 About UI & Responsiveness
