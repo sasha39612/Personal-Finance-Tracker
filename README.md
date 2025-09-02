@@ -1,73 +1,97 @@
-# Portfolio Project
+# 📊 Personal Finance Tracker – Portfolio Project
 
-This program allows you to record income and expenses, as well as create visual representations by days, months, and years.
+This project is a **portfolio application** demonstrating both backend and frontend development.  
+It allows users to **record income and expenses** and provides **visual reports** by days, months, and years.  
 
-This repository contains two main applications:
-
-- **front**: Next.js React client
-- **back**: NestJS GraphQL API server
+The main goal of this project was to **study and showcase backend architecture** (NestJS, GraphQL, PostgreSQL, TypeORM, e2e testing).  
+The frontend serves as a **demo client** for interacting with the backend API.  
 
 ---
 
-## front (Next.js Client)
+## 🗂️ Project Structure
 
-### Features
-- React 19 (RC) with Next.js 15
-- Apollo Client for GraphQL
-- Chart.js for data visualization
-- TailwindCSS for styling
-- Datepicker support
+This repository contains two main applications:
 
-### Setup
+- **front** → Next.js React client  
+- **back** → NestJS GraphQL API server  
 
-```sh
+---
+
+## 🖥️ Frontend (Next.js Client)
+
+### 🚀 Features
+- React 19 (RC) with Next.js 15  
+- Apollo Client for GraphQL queries & mutations  
+- Chart.js for data visualization  
+- TailwindCSS for quick styling  
+- React Datepicker for date-based filters  
+
+> ⚠️ Note: Responsive design and advanced UI/UX patterns were **not implemented**, since the focus was on backend development.  
+
+### ⚙️ Setup
+
+```bash
 cd front
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open http://localhost:3000 in your browser.
 
-### Scripts
 
-- `npm run dev` — Start development server
-- `npm run build` — Build for production
-- `npm run start` — Start production server
-- `npm run lint` — Lint code
+## 📂 Scripts
+npm run dev — start development server
 
----
+npm run build — build for production
 
-## back (NestJS API)
+npm run start — run production server
 
-### Features
-- NestJS 10
-- GraphQL API with Apollo Server
-- TypeORM with PostgreSQL
-- Date-fns for date utilities
-- Jest for testing
+npm run lint — lint code
 
-### Setup
 
-```sh
+## ⚙️ Backend (NestJS API)
+
+### 🚀 Features
+NestJS 10 modular backend
+
+GraphQL API with Apollo Server
+
+PostgreSQL + TypeORM with migrations
+
+Date-fns for date utilities
+
+Jest for unit, integration & e2e testing
+
+Docker setup for local database
+
+### ⚙️ Setup
+
+```bash
 cd back
 npm install
 npm run start:dev
 ```
 
-API will be available at [http://localhost:4000/graphql](http://localhost:4000/graphql).
+API will be available at:
+👉 http://localhost:4000/graphql
 
-### Scripts
 
-- `npm run start:dev` — Start development server
-- `npm run build` — Build for production
-- `npm run test` — Run tests
-- `npm run lint` — Lint code
-- `npm run migration:generate` — Generate TypeORM migration
-- `npm run migration:run:local` — Run migrations
+## 📂 Scripts
+npm run start:dev — start development server
 
----
+npm run build — build for production
 
-## Requirements
+npm run test — run tests
 
-- Node.js 20.x (LTS)
-- PostgreSQL
+npm run lint — lint code
+
+npm run migration:generate — generate TypeORM migration
+
+npm run migration:run:local — run migrations locally
+
+## 🔧 Requirements
+Node.js 20.x (LTS)
+
+PostgreSQL (local or via Docker)
+
+Docker (recommended for DB setup)
