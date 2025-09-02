@@ -100,7 +100,7 @@ export class OutcomeService {
     return outcomes.map((outcome) => plainToInstance(OutcomeModel, outcome));
   }
 
-  async getOutcomesChats(
+  async getOutcomesCharts(
       startDate: string,
       endDate: string,
       period: 'day' | 'month' | 'year',

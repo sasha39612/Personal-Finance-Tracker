@@ -17,12 +17,12 @@ export class OutcomeResolver {
   }
 
    @Query(() => OutcomePeriodModel)
-    async outcomeChats(
+    async outcomeCharts(
       @Args('startDate') startDate: string,
       @Args('endDate') endDate: string,
       @Args('period') period: 'day' | 'month' | 'year',
     ): Promise<OutcomePeriodModel> {
-      return this.outcomeService.getOutcomesChats(startDate, endDate, period);
+      return this.outcomeService.getOutcomesCharts(startDate, endDate, period);
     }
 
   @Mutation(() => OutcomeModel)
