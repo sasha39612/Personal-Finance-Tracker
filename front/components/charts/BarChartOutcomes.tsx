@@ -11,12 +11,12 @@ import {
   Legend,
   ChartConfiguration,
 } from "chart.js";
-import { OutcomeChats } from "@/lib/types";
+import { OutcomeCharts } from "@/lib/types";
 
 // Register necessary components
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const BarChatOutcomes = ({ outcomeFetch }: { outcomeFetch: OutcomeChats }) => {
+const BarChartOutcomes = ({ outcomeFetch }: { outcomeFetch: OutcomeCharts }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<ChartJS | null>(null);
 
@@ -77,4 +77,4 @@ const BarChatOutcomes = ({ outcomeFetch }: { outcomeFetch: OutcomeChats }) => {
   );
 };
 
-export default BarChatOutcomes;
+export default BarChartOutcomes;

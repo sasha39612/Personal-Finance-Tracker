@@ -4,8 +4,8 @@ import BarChartIncomes from "@/components/charts/BarChartIncomes";
 import BarChartOutcomes from "@/components/charts/BarChartOutcomes";
 import BarChartSaving from "@/components/charts/BarChartSaving";
 import Period from "@/components/period/Period";
-import { queryChatsIncomeRSC, queryChatsOutcomeRSC } from "@/lib/fetch-data";
-import { IncomeCharts, OutcomeChats, SavingChats } from "@/lib/types";
+import { queryChartsIncomeRSC, queryChartsOutcomeRSC } from "@/lib/fetch-data";
+import { IncomeCharts, OutcomeCharts, SavingCharts } from "@/lib/types";
 import getSavings from "@/lib/get-savings";
 
 export default function Home() {
@@ -13,13 +13,13 @@ export default function Home() {
   const [endDate, setEndDate] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('day');
   const [incomeFetch, setIncomeFetch] = useState<IncomeCharts>({ labels: [''], datasets: [] });
-  const [outcomeFetch, setOutcomeFetch] = useState<OutcomeChats>({ labels: [''], datasets: [] });
-  const [savingFetch, setSavingFetch] = useState<SavingChats>({ labels: [''], datasets: [] });
+  const [outcomeFetch, setOutcomeFetch] = useState<OutcomeCharts>({ labels: [''], datasets: [] });
+  const [savingFetch, setSavingFetch] = useState<SavingCharts>({ labels: [''], datasets: [] });
 
   useEffect(() => {
     async function fetchData() {
-      const income = await queryChatsIncomeRSC(startDate, endDate, selectedPeriod);
-      const outcome = await queryChatsOutcomeRSC(startDate, endDate, selectedPeriod);
+      const income = await queryChartsIncomeRSC(startDate, endDate, selectedPeriod);
+      const outcome = await queryChartsOutcomeRSC(startDate, endDate, selectedPeriod);
       setIncomeFetch(income);
       setOutcomeFetch(outcome);
     }

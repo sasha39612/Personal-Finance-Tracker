@@ -45,9 +45,9 @@ export interface IncomeCharts {
   datasets: Array<Datasets>;
 }
 
-export type SavingChats = IncomeCharts
+export type SavingCharts = IncomeCharts
 
-export interface OutcomeChats {
+export interface OutcomeCharts {
   labels: string[];
   datasets: Array<Datasets>;
 }

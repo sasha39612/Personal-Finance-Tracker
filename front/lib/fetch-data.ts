@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 import client from './apollo-client'
-import { IncomeCharts, OutcomeChats } from './types'
+import { IncomeCharts, OutcomeCharts } from './types'
 
-export const queryChatsIncomeRSCgql = gql`
+export const queryChartsIncomeRSCgql = gql`
   query IncomeCharts($startDate: String!, $endDate: String!, $period: String!) {
     incomeCharts(startDate: $startDate, endDate: $endDate, period: $period) {
       labels
@@ -16,9 +16,9 @@ export const queryChatsIncomeRSCgql = gql`
   }
 `;
 
-export async function queryChatsIncomeRSC(startDate: string, endDate: string, period: string): Promise<IncomeCharts> {
+export async function queryChartsIncomeRSC(startDate: string, endDate: string, period: string): Promise<IncomeCharts> {
   const result = await client.query<{ incomeCharts: IncomeCharts }>({
-    query: queryChatsIncomeRSCgql,
+    query: queryChartsIncomeRSCgql,
     variables: { startDate, endDate, period },
     context: {
       headers: {
@@ -30,9 +30,9 @@ export async function queryChatsIncomeRSC(startDate: string, endDate: string, pe
   return result.data.incomeCharts;
 }
 
-export const queryChatsOutcomeRSCgql = gql`
-  query OutcomeChats($startDate: String!, $endDate: String!, $period: String!) {
-    outcomeChats(startDate: $startDate, endDate: $endDate, period: $period) {
+export const queryChartsOutcomeRSCgql = gql`
+  query OutcomeCharts($startDate: String!, $endDate: String!, $period: String!) {
+    outcomeCharts(startDate: $startDate, endDate: $endDate, period: $period) {
       labels
       datasets {
         data
@@ -44,9 +44,9 @@ export const queryChatsOutcomeRSCgql = gql`
   }
 `;
 
-export async function queryChatsOutcomeRSC(startDate: string, endDate: string, period: string): Promise<OutcomeChats> {
-  const result = await client.query<{ outcomeChats: OutcomeChats }>({
-    query: queryChatsOutcomeRSCgql,
+export async function queryChartsOutcomeRSC(startDate: string, endDate: string, period: string): Promise<OutcomeCharts> {
+  const result = await client.query<{ outcomeCharts: OutcomeCharts }>({
+    query: queryChartsOutcomeRSCgql,
     variables: { startDate, endDate, period },
     context: {
       headers: {
@@ -55,5 +55,5 @@ export async function queryChatsOutcomeRSC(startDate: string, endDate: string, p
     },
   });
 
-  return result.data.outcomeChats;
+  return result.data.outcomeCharts;
 }

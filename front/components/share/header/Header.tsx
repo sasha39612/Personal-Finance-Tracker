@@ -8,7 +8,7 @@ const Header = () => {
         href="/"
         rel="noopener noreferrer"
       >
-        Chats
+        Charts
       </Link>
     </div>
     <div className="flex gap-4">

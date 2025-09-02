@@ -1,7 +1,7 @@
 import randomRGBA from "./get-color";
-import { IncomeCharts, OutcomeChats, SavingChats } from "./types";
+import { IncomeCharts, OutcomeCharts, SavingCharts } from "./types";
 
-const getSavings = (income: IncomeCharts, outcome: OutcomeChats): SavingChats => {
+const getSavings = (income: IncomeCharts, outcome: OutcomeCharts): SavingCharts => {
   const incomeLabels = income?.labels || [];
   const outcomeLabels = outcome?.labels || [];
   let labels = Array.from(new Set([...incomeLabels, ...outcomeLabels])) as string[];
@@ -9,7 +9,7 @@ const getSavings = (income: IncomeCharts, outcome: OutcomeChats): SavingChats =>
     labels = labels.map(Number).sort((a, b) => a - b).map(String);
   };
 
-  const savings: SavingChats = { labels, datasets: [{ data: [], backgroundColor: [], borderColor: [], borderWidth: 1 }] };
+  const savings: SavingCharts = { labels, datasets: [{ data: [], backgroundColor: [], borderColor: [], borderWidth: 1 }] };
   labels.forEach((label) => {
     const incomeDatasetsIndex = income.labels.indexOf(label);
     const outcomeDatasetsIndex = outcome.labels.indexOf(label);

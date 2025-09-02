@@ -29,7 +29,7 @@ const Period = ({ setStartDate, setEndDate, setSelectedPeriod }: PeriodProps) =>
       />
       <fieldset>
         <legend className="pt-6 text-sm/6 font-semibold text-gray-900">Choose period for total incomes/outcomes</legend>
-        <p className="mt-1 text-sm/6 text-gray-600">The chat will be builded per:</p>
+        <p className="mt-1 text-sm/6 text-gray-600">The chart will be builded per:</p>
         <div className="mt-2 space-y-2">
           <div className="flex items-center gap-x-3">
             <input

@@ -11,12 +11,12 @@ import {
   Legend,
   ChartConfiguration,
 } from "chart.js";
-import { SavingChats } from "@/lib/types";
+import { SavingCharts } from "@/lib/types";
 
 // Register necessary components
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const BarChartSaving = ({ savingFetch }: { savingFetch: SavingChats }) => {
+const BarChartSaving = ({ savingFetch }: { savingFetch: SavingCharts }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<ChartJS | null>(null);
 

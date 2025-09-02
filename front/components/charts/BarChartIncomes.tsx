@@ -16,7 +16,7 @@ import { IncomeCharts } from "@/lib/types";
 // Register necessary components
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const BarChatIncomes = ({ incomeFetch }: { incomeFetch: IncomeCharts }) => {
+const BarChartIncomes = ({ incomeFetch }: { incomeFetch: IncomeCharts }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<ChartJS | null>(null);
 
@@ -77,4 +77,4 @@ const BarChatIncomes = ({ incomeFetch }: { incomeFetch: IncomeCharts }) => {
   );
 };
 
-export default BarChatIncomes;
+export default BarChartIncomes;
