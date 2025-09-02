@@ -5,14 +5,14 @@ import BarChartOutcomes from "@/components/charts/BarChartOutcomes";
 import BarChartSaving from "@/components/charts/BarChartSaving";
 import Period from "@/components/period/Period";
 import { queryChatsIncomeRSC, queryChatsOutcomeRSC } from "@/lib/fetch-data";
-import { IncomeChats, OutcomeChats, SavingChats } from "@/lib/types";
+import { IncomeCharts, OutcomeChats, SavingChats } from "@/lib/types";
 import getSavings from "@/lib/get-savings";
 
 export default function Home() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('day');
-  const [incomeFetch, setIncomeFetch] = useState<IncomeChats>({ labels: [''], datasets: [] });
+  const [incomeFetch, setIncomeFetch] = useState<IncomeCharts>({ labels: [''], datasets: [] });
   const [outcomeFetch, setOutcomeFetch] = useState<OutcomeChats>({ labels: [''], datasets: [] });
   const [savingFetch, setSavingFetch] = useState<SavingChats>({ labels: [''], datasets: [] });
 

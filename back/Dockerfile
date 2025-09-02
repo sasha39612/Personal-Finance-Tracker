@@ -1,8 +1,11 @@
-FROM node:18-alpine
+FROM node:20-alpine
 WORKDIR /usr/src/app
-COPY . .
+COPY package*.json ./
 
 RUN mpn ci
+
+COPY . .
+
 RUN npm run build
 
 EXPOSE 3000

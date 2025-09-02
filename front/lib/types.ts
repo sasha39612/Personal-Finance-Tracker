@@ -40,12 +40,12 @@ export interface Outcomes {
   categories_outcome: Array<CategoryOutcome>;
 }
 
-export interface IncomeChats {
+export interface IncomeCharts {
   labels: string[];
   datasets: Array<Datasets>;
 }
 
-export type SavingChats = IncomeChats
+export type SavingChats = IncomeCharts
 
 export interface OutcomeChats {
   labels: string[];

@@ -64,19 +64,6 @@ export class IncomeService {
     });
   }
 
-  async getIncomeById(id: number): Promise<IncomeModel> {
-    try {
-      const income = await this.incomeRepository.findOne({
-      where: { id },
-      relations: ['categories', 'categories.entities'],
-    });
-    return plainToInstance(IncomeModel, income);
-  } catch (error) {
-      console.error('Error fetching income by ID:', error);
-      throw new Error('Income not found');
-    }
-  }
-
   async getIncomes(startDate: string, endDate: string): Promise<IncomeModel[]> {
     const startInitial = startOfDay(new Date('1970-01-01'));
     const endInitial = endOfDay(new Date('1970-01-01'));
@@ -103,7 +90,7 @@ export class IncomeService {
     return incomes.map((income) => plainToInstance(IncomeModel, income));
   }
 
-  async getIncomesChats(
+  async getIncomesCharts(
     startDate: string,
     endDate: string,
     period: 'day' | 'month' | 'year',

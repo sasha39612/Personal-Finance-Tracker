@@ -11,12 +11,12 @@ import {
   Legend,
   ChartConfiguration,
 } from "chart.js";
-import { IncomeChats } from "@/lib/types";
+import { IncomeCharts } from "@/lib/types";
 
 // Register necessary components
 ChartJS.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const BarChatIncomes = ({ incomeFetch }: { incomeFetch: IncomeChats }) => {
+const BarChatIncomes = ({ incomeFetch }: { incomeFetch: IncomeCharts }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<ChartJS | null>(null);
 

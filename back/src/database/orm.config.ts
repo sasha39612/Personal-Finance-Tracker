@@ -1,32 +1,26 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { resolve } from 'path';
-import { Config } from 'src/config/config.service';
 import { DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import 'dotenv/config';
 import * as process from 'node:process';
 
-export const getOrmConfig = (env: Config): TypeOrmModuleOptions => {
-  return {
-    type: 'postgres',
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    username: env.DB_USER,
-    password: env.DB_PASSWORD,
-    database: env.DB_NAME,
-    migrationsRun: process.env.MODE_ENV !== 'TEST',
-    autoLoadEntities: true,
-    synchronize: process.env.MODE_ENV === 'DEV', // ❗Enable only in development
-    migrations: [resolve(__dirname, './migrations/*{.ts,.js}')],
-    entities: [resolve(__dirname, '../**/*.entity{.ts,.js}')],
-    // logging: ['error]
-    logging: true,
-  };
-};
-
-const dataSource = new DataSource({
-  ...(getOrmConfig(process.env as any) as PostgresConnectionOptions),
+export const getOrmConfig = (env: any): TypeOrmModuleOptions => ({
+  type: 'postgres',
+  host: env.DB_HOST,
+  port: Number(env.DB_PORT),
+  username: env.DB_USER,
+  password: env.DB_PASSWORD,
+  database: env.DB_NAME,
+  autoLoadEntities: true,
+  synchronize: env.MODE_ENV === 'TEST',
+  migrationsRun: env.MODE_ENV !== 'TEST',
+  migrations: [resolve(__dirname, './migrations/*{.ts,.js}')],
+  logging: false,
 });
+
+const env = process.env;
+const dataSource = new DataSource(getOrmConfig(env) as PostgresConnectionOptions);
 
 dataSource.initialize().catch((err) => console.log(err));
 

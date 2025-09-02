@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client'
 import client from './apollo-client'
-import { IncomeChats, OutcomeChats } from './types'
+import { IncomeCharts, OutcomeChats } from './types'
 
 export const queryChatsIncomeRSCgql = gql`
-  query IncomeChats($startDate: String!, $endDate: String!, $period: String!) {
-    incomeChats(startDate: $startDate, endDate: $endDate, period: $period) {
+  query IncomeCharts($startDate: String!, $endDate: String!, $period: String!) {
+    incomeCharts(startDate: $startDate, endDate: $endDate, period: $period) {
       labels
       datasets {
         data
@@ -16,8 +16,8 @@ export const queryChatsIncomeRSCgql = gql`
   }
 `;
 
-export async function queryChatsIncomeRSC(startDate: string, endDate: string, period: string): Promise<IncomeChats> {
-  const result = await client.query<{ incomeChats: IncomeChats }>({
+export async function queryChatsIncomeRSC(startDate: string, endDate: string, period: string): Promise<IncomeCharts> {
+  const result = await client.query<{ incomeCharts: IncomeCharts }>({
     query: queryChatsIncomeRSCgql,
     variables: { startDate, endDate, period },
     context: {
@@ -27,7 +27,7 @@ export async function queryChatsIncomeRSC(startDate: string, endDate: string, pe
     },
   });
 
-  return result.data.incomeChats;
+  return result.data.incomeCharts;
 }
 
 export const queryChatsOutcomeRSCgql = gql`

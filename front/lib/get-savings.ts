@@ -1,7 +1,7 @@
 import randomRGBA from "./get-color";
-import { IncomeChats, OutcomeChats, SavingChats } from "./types";
+import { IncomeCharts, OutcomeChats, SavingChats } from "./types";
 
-const getSavings = (income: IncomeChats, outcome: OutcomeChats): SavingChats => {
+const getSavings = (income: IncomeCharts, outcome: OutcomeChats): SavingChats => {
   const incomeLabels = income?.labels || [];
   const outcomeLabels = outcome?.labels || [];
   let labels = Array.from(new Set([...incomeLabels, ...outcomeLabels])) as string[];

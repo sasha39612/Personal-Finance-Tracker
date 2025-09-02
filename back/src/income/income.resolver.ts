@@ -17,12 +17,12 @@ export class IncomeResolver {
   }
 
   @Query(() => IncomePeriodModel)
-  async incomeChats(
+  async incomeCharts(
     @Args('startDate') startDate: string,
     @Args('endDate') endDate: string,
     @Args('period') period: 'day' | 'month' | 'year',
   ): Promise<IncomePeriodModel> {
-    return this.incomeService.getIncomesChats(startDate, endDate, period);
+    return this.incomeService.getIncomesCharts(startDate, endDate, period);
   }
 
   @Mutation(() => IncomeModel)
