@@ -1,8 +1,18 @@
-import OutcomesForm from "@/components/outcomes/OutcomesForm"
-import { outcomes  } from '../../datum/dates'
+'use client'
+
+import OutcomesForm from '@/components/outcomes/outcomesForm';
+import { ApolloProvider } from '@apollo/client';
+import client from '@/lib/apollo-client';
+import { Suspense } from 'react';
 
 const Outcomes = () => {
-  return <OutcomesForm outcomes={outcomes} />
+  return (
+    <ApolloProvider client={client}>
+      <Suspense fallback={<>loading</>}>
+        <OutcomesForm />
+      </Suspense>
+    </ApolloProvider>
+  );
 }
 
 export default Outcomes;
