@@ -84,6 +84,8 @@ npm run start:dev — start development server
 
 npm run build — build for production
 
+npm run test — run unit tests (10 tests covering IncomeService/OutcomeService)
+
 npm run test:e2e — run e2e tests (8 tests covering income/outcome GraphQL flows)
 
 npm run lint — lint code
@@ -108,7 +110,7 @@ Docker (recommended for DB setup)
 ✅ **Full-stack scope** – covers both backend (NestJS, GraphQL, PostgreSQL) and frontend (Next.js, React, Apollo Client).  
 ✅ **Backend-first architecture** – demonstrates API design, database migrations and Dockerized DB setup.  
 ✅ **Enterprise practices** – environment variable configs, strict TypeScript, ESLint + Prettier, and clean code organization.  
-✅ **Testing discipline** – includes end-to-end tests with Jest to validate reliability.  
+✅ **Testing discipline** – includes unit tests (service layer) and end-to-end tests (GraphQL flows) with Jest.  
 ✅ **GraphQL expertise** – schema-first approach with resolvers, TypeORM entities, and Apollo Server integration.  
 ✅ **Next.js 15 adoption** – modern frontend stack with React 19, Apollo Client, and chart visualizations for API data.  
 

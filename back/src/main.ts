@@ -13,7 +13,9 @@ dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN?.split(',') ?? 'http://localhost:3000',
+  });
   app.useGlobalPipes(new ValidationPipe({}));
   app.useGlobalFilters(new GraphqlExceptionFilter());
 
