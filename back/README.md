@@ -27,6 +27,8 @@ $ npm install
 ## ⚙️ Environment Setup
 Create a .env file in the root directory and fill in the variables based on .env.example.
 
+## 🔒 Scope
+Authentication/authorization is **intentionally out of scope** — the focus of this project is backend/API architecture, not identity management.
 
 ## 🏃 Running the Project
 
@@ -66,6 +68,8 @@ $ npm run migration:generate create-new-table
 
 Move generated migration files to: src/database/migrations
 
+> ⚠️ Migrations run automatically on boot outside of tests (`migrationsRun` in `orm.config.ts`), but it's recommended to run `npm run migration:run:local` explicitly before starting the app for the first time so schema issues surface before boot.
+
 
 ## 🧪 Testing
 
@@ -77,6 +81,8 @@ Ensure the test database is running. If issues occur, remove the db-test-data vo
 ```bash
 $ npm run test:e2e
 ```
+
+Currently covers 8 e2e tests across the income and outcome GraphQL modules (queries, chart aggregation, and create/update flows).
 
 
 ## 📂 Project Scripts (package.json)

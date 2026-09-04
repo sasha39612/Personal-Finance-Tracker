@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Income } from './entities/income.entity';
 import { Between, Repository } from 'typeorm';
@@ -19,75 +19,87 @@ import { IncomePeriodModel } from './models/income-period.model';
 
 @Injectable()
 export class IncomeService {
+  private readonly logger = new Logger(IncomeService.name);
+
   constructor(
     @InjectRepository(Income)
     private incomeRepository: Repository<Income>,
   ) {}
 
   async createIncome(incomeData: IncomeInput): Promise<Income> {
-    let savedIncome: Income;
-    const incomeDB = await this.incomeRepository.find({
-      where: {
-        datum: Between(
-          startOfDay(incomeData.datum),
-          endOfDay(incomeData.datum),
-        ),
-      },
-      relations: ['categories', 'categories.entities'],
-    });
-
-    const categories = incomeData.categories.map((category) => {
-      return {
-        ...category,
-        entities: category.entities.map((entity) => ({
-          ...entity,
-        })),
-      };
-    });
-
-    if (incomeDB?.length) {
-      savedIncome = await this.incomeRepository.save({
-        ...incomeDB[0],
-        categories,
-      });
-    } else {
-      const income = this.incomeRepository.create({
-        ...incomeData,
-        categories,
-      });
-      savedIncome = await this.incomeRepository.save(income);
-    }
-
-    return this.incomeRepository.findOne({
-      where: { id: savedIncome.id },
-      relations: ['categories', 'categories.entities'],
-    });
-  }
-
-  async getIncomes(startDate: string, endDate: string): Promise<IncomeModel[]> {
-    const startInitial = startOfDay(new Date('1970-01-01'));
-    const endInitial = endOfDay(new Date('1970-01-01'));
-    const start = startDate ? new Date(startDate) : startInitial;
-    const end = endDate ? new Date(endDate) : endInitial;
-
-    let incomes = await this.incomeRepository.find({
-      where: {
-        datum: Between(startOfDay(start), endOfDay(end)),
-      },
-      relations: ['categories', 'categories.entities'],
-    });
-
-    if (!incomes?.length) {
-      //Call initial data.
-      incomes = await this.incomeRepository.find({
+    try {
+      let savedIncome: Income;
+      const incomeDB = await this.incomeRepository.find({
         where: {
-          datum: Between(startInitial, endInitial),
+          datum: Between(
+            startOfDay(incomeData.datum),
+            endOfDay(incomeData.datum),
+          ),
         },
         relations: ['categories', 'categories.entities'],
       });
-    }
 
-    return incomes.map((income) => plainToInstance(IncomeModel, income));
+      const categories = incomeData.categories.map((category) => {
+        return {
+          ...category,
+          entities: category.entities.map((entity) => ({
+            ...entity,
+          })),
+        };
+      });
+
+      if (incomeDB?.length) {
+        savedIncome = await this.incomeRepository.save({
+          ...incomeDB[0],
+          categories,
+        });
+      } else {
+        const income = this.incomeRepository.create({
+          ...incomeData,
+          categories,
+        });
+        savedIncome = await this.incomeRepository.save(income);
+      }
+
+      return this.incomeRepository.findOne({
+        where: { id: savedIncome.id },
+        relations: ['categories', 'categories.entities'],
+      });
+    } catch (err) {
+      this.logger.error('Failed to create income', err instanceof Error ? err.stack : err);
+      throw new InternalServerErrorException('Failed to create income');
+    }
+  }
+
+  async getIncomes(startDate: string, endDate: string): Promise<IncomeModel[]> {
+    try {
+      const startInitial = startOfDay(new Date('1970-01-01'));
+      const endInitial = endOfDay(new Date('1970-01-01'));
+      const start = startDate ? new Date(startDate) : startInitial;
+      const end = endDate ? new Date(endDate) : endInitial;
+
+      let incomes = await this.incomeRepository.find({
+        where: {
+          datum: Between(startOfDay(start), endOfDay(end)),
+        },
+        relations: ['categories', 'categories.entities'],
+      });
+
+      if (!incomes?.length) {
+        //Call initial data.
+        incomes = await this.incomeRepository.find({
+          where: {
+            datum: Between(startInitial, endInitial),
+          },
+          relations: ['categories', 'categories.entities'],
+        });
+      }
+
+      return incomes.map((income) => plainToInstance(IncomeModel, income));
+    } catch (err) {
+      this.logger.error('Failed to fetch incomes', err instanceof Error ? err.stack : err);
+      throw new InternalServerErrorException('Failed to fetch incomes');
+    }
   }
 
   async getIncomesCharts(
@@ -119,12 +131,18 @@ export class IncomeService {
       endPeriod = endDate ? new Date(endDate) : endInitial;
     }
 
-    const incomes = await this.incomeRepository.find({
-      where: {
-        datum: Between(startOfDay(startPeriod), endOfDay(endPeriod)),
-      },
-      relations: ['categories', 'categories.entities'],
-    });
+    let incomes: Income[];
+    try {
+      incomes = await this.incomeRepository.find({
+        where: {
+          datum: Between(startOfDay(startPeriod), endOfDay(endPeriod)),
+        },
+        relations: ['categories', 'categories.entities'],
+      });
+    } catch (err) {
+      this.logger.error('Failed to fetch income charts', err instanceof Error ? err.stack : err);
+      throw new InternalServerErrorException('Failed to fetch income charts');
+    }
 
     const incomeUpdated = incomes
       .map((income) => plainToInstance(IncomeModel, income))

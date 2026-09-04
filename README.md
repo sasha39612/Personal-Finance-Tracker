@@ -69,8 +69,11 @@ Docker setup for local database
 ```bash
 cd back
 npm install
+npm run migration:run:local
 npm run start:dev
 ```
+
+> ⚠️ Migrations run automatically on boot outside of tests, but it's recommended to run `migration:run:local` explicitly before the first start so schema issues surface before the app tries to boot.
 
 API will be available at:
 👉 http://localhost:4000/graphql
@@ -81,13 +84,17 @@ npm run start:dev — start development server
 
 npm run build — build for production
 
-npm run test — run tests
+npm run test:e2e — run e2e tests (8 tests covering income/outcome GraphQL flows)
 
 npm run lint — lint code
 
 npm run migration:generate — generate TypeORM migration
 
 npm run migration:run:local — run migrations locally
+
+## 🚧 Scope
+
+Authentication/authorization is **intentionally out of scope** — this project focuses on backend/API architecture (NestJS, GraphQL, PostgreSQL, TypeORM), not on identity management.
 
 ## 🔧 Requirements
 Node.js 20.x (LTS)

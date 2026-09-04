@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { resolve } from 'path';
 import { DataSource } from 'typeorm';
@@ -22,6 +23,6 @@ export const getOrmConfig = (env: any): TypeOrmModuleOptions => ({
 const env = process.env;
 const dataSource = new DataSource(getOrmConfig(env) as PostgresConnectionOptions);
 
-dataSource.initialize().catch((err) => console.log(err));
+dataSource.initialize().catch((err) => new Logger('OrmConfig').error(err));
 
 export default dataSource;

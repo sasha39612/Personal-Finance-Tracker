@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Outcome } from './entities/outcome.entity';
 import { Between, Repository } from 'typeorm';
@@ -19,85 +19,97 @@ import { OutcomePeriodModel } from './models/outcome-period.model';
 
 @Injectable()
 export class OutcomeService {
+  private readonly logger = new Logger(OutcomeService.name);
+
   constructor(
     @InjectRepository(Outcome)
     private outcomeRepository: Repository<Outcome>,
   ) {}
 
   async createOutcome(outcomeData: OutcomeInput): Promise<Outcome> {
-    let savedOutcome: Outcome;
-    const outcomeDB = await this.outcomeRepository.find({
-      where: {
-        datum: Between(
-          startOfDay(outcomeData.datum),
-          endOfDay(outcomeData.datum),
-        ),
-      },
-      relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
-    });
-
-    const categories_outcome = outcomeData.categories_outcome.map(
-      (categoryOutcome) => {
-        return {
-          ...categoryOutcome,
-          entitiesOutcome: categoryOutcome.entities_outcome.map(
-            (entityOutcome) => ({
-              ...entityOutcome,
-            }),
+    try {
+      let savedOutcome: Outcome;
+      const outcomeDB = await this.outcomeRepository.find({
+        where: {
+          datum: Between(
+            startOfDay(outcomeData.datum),
+            endOfDay(outcomeData.datum),
           ),
-        };
-      },
-    );
+        },
+        relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
+      });
 
-    if (outcomeDB?.length) {
-      savedOutcome = await this.outcomeRepository.save({
-        ...outcomeDB[0],
-        categories_outcome,
+      const categories_outcome = outcomeData.categories_outcome.map(
+        (categoryOutcome) => {
+          return {
+            ...categoryOutcome,
+            entitiesOutcome: categoryOutcome.entities_outcome.map(
+              (entityOutcome) => ({
+                ...entityOutcome,
+              }),
+            ),
+          };
+        },
+      );
+
+      if (outcomeDB?.length) {
+        savedOutcome = await this.outcomeRepository.save({
+          ...outcomeDB[0],
+          categories_outcome,
+        });
+      } else {
+        const outcome = this.outcomeRepository.create({
+          ...outcomeData,
+          categories_outcome,
+        });
+        savedOutcome = await this.outcomeRepository.save(outcome);
+      }
+
+      return this.outcomeRepository.findOne({
+        where: { id: savedOutcome.id },
+        relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
       });
-    } else {
-      const outcome = this.outcomeRepository.create({
-        ...outcomeData,
-        categories_outcome,
-      });
-      savedOutcome = await this.outcomeRepository.save(outcome);
+    } catch (err) {
+      this.logger.error('Failed to create outcome', err instanceof Error ? err.stack : err);
+      throw new InternalServerErrorException('Failed to create outcome');
     }
-
-    return this.outcomeRepository.findOne({
-      where: { id: savedOutcome.id },
-      relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
-    });
   }
 
   async getOutcomes(
     startDate: string,
     endDate: string,
   ): Promise<OutcomeModel[]> {
-    const startInitial = startOfDay(new Date('1970-01-01'));
-    const endInitial = endOfDay(new Date('1970-01-01'));
-    const start = startDate ? new Date(startDate) : startInitial;
-    const end = endDate ? new Date(endDate) : endInitial;
+    try {
+      const startInitial = startOfDay(new Date('1970-01-01'));
+      const endInitial = endOfDay(new Date('1970-01-01'));
+      const start = startDate ? new Date(startDate) : startInitial;
+      const end = endDate ? new Date(endDate) : endInitial;
 
-    let outcomes = await this.outcomeRepository.find({
-      where: {
-        datum: Between(startOfDay(start), endOfDay(end)),
-      },
-      relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
-    });
-
-    if (!outcomes?.length) {
-      //Call initial data.
-      outcomes = await this.outcomeRepository.find({
+      let outcomes = await this.outcomeRepository.find({
         where: {
-          datum: Between(startInitial, endInitial),
+          datum: Between(startOfDay(start), endOfDay(end)),
         },
-        relations: [
-          'categories_outcome',
-          'categories_outcome.entities_outcome',
-        ],
+        relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
       });
-    }
 
-    return outcomes.map((outcome) => plainToInstance(OutcomeModel, outcome));
+      if (!outcomes?.length) {
+        //Call initial data.
+        outcomes = await this.outcomeRepository.find({
+          where: {
+            datum: Between(startInitial, endInitial),
+          },
+          relations: [
+            'categories_outcome',
+            'categories_outcome.entities_outcome',
+          ],
+        });
+      }
+
+      return outcomes.map((outcome) => plainToInstance(OutcomeModel, outcome));
+    } catch (err) {
+      this.logger.error('Failed to fetch outcomes', err instanceof Error ? err.stack : err);
+      throw new InternalServerErrorException('Failed to fetch outcomes');
+    }
   }
 
   async getOutcomesCharts(
@@ -129,13 +141,19 @@ export class OutcomeService {
         endPeriod = endDate ? new Date(endDate) : endInitial;
       }
   
-      const incomes = await this.outcomeRepository.find({
-        where: {
-          datum: Between(startOfDay(startPeriod), endOfDay(endPeriod)),
-        },
-        relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
-      });
-  
+      let incomes: Outcome[];
+      try {
+        incomes = await this.outcomeRepository.find({
+          where: {
+            datum: Between(startOfDay(startPeriod), endOfDay(endPeriod)),
+          },
+          relations: ['categories_outcome', 'categories_outcome.entities_outcome'],
+        });
+      } catch (err) {
+        this.logger.error('Failed to fetch outcome charts', err instanceof Error ? err.stack : err);
+        throw new InternalServerErrorException('Failed to fetch outcome charts');
+      }
+
       const incomeUpdated = incomes
         .map((income) => plainToInstance(OutcomeModel, income))
         .sort(

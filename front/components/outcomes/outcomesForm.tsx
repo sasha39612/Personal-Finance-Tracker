@@ -113,8 +113,8 @@ const OutcomesForm = () => {
       if (resultCategories) {
         setFormValues(resultCategories);
       }
-    } catch (err) {
-      console.log('err', err);
+    } catch {
+      // no-op
     }
   }
 
