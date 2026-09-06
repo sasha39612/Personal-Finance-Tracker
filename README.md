@@ -84,9 +84,9 @@ npm run start:dev — start development server
 
 npm run build — build for production
 
-npm run test — run unit tests (10 tests covering IncomeService/OutcomeService)
+npm run test — run unit tests covering IncomeService/OutcomeService
 
-npm run test:e2e — run e2e tests (8 tests covering income/outcome GraphQL flows)
+npm run test:e2e — run e2e tests covering income/outcome GraphQL flows
 
 npm run lint — lint code
 
